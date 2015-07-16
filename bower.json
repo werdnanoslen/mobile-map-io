@@ -1,0 +1,21 @@
+{
+  "name": "mobile-map-io",
+  "dependencies": {
+    "ionic": "driftyco/ionic-bower#1.0.1",
+    "ionic-material": "~0.4.2"
+  },
+  "version": "0.0.0",
+  "homepage": "https://github.com/werdnanoslen/mobile-map-io",
+  "authors": [
+    "Andrew Nelson <andy@andyhub.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/lib",
+    "test",
+    "tests"
+  ]
+}
