@@ -1,0 +1,29 @@
+<ion-view view-title="Map">
+    <ion-content scroll="false">
+        <div id="search" class="item item-input-inset">
+            <label class="item-input-wrapper">
+                <input
+                    type="text"
+                    placeholder="Search for a place"
+                    g-places-autocomplete
+                    ng-model="search"
+                    ng-show="mapReady"
+                />
+            </label>
+        </div>
+
+        <ui-gmap-google-map
+            center='map.center'
+            control='map.control'
+            zoom='map.zoom'>
+        </ui-gmap-google-map>
+
+        <button id="centerOnMe"
+            ng-click="centerOnMe()"
+            ng-show="mapReady"
+            class="button button-fab button-fab-bottom-right icon ion-pinpoint">
+        </button>
+
+        <button class="button button-fab button-fab-bottom-right button-assertive icon ion-plus"></button>
+    </ion-content>
+</ion-view>
