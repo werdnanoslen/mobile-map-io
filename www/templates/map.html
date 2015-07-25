@@ -16,6 +16,21 @@
             center='map.center'
             control='map.control'
             zoom='map.zoom'>
+            <ui-gmap-marker
+                coords="position.coords"
+                options="position.options"
+                idKey="position.id">
+            </ui-gmap-marker>
+            <!-- <ui-gmap-marker
+                coords="search.coords"
+                options="search.options"
+                events="search.events"
+                idkey="search.id">
+            </ui-gmap-marker>
+            <ui-gmap-markers
+                 models="reports.markers"
+                 coords="self">
+            </ui-gmap-markers> -->
         </ui-gmap-google-map>
 
         <button id="centerOnMe"

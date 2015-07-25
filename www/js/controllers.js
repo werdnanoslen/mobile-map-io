@@ -3,7 +3,7 @@ angular.module('controllers', [])
 .controller('MapCtrl', function($scope, $ionicLoading, uiGmapGoogleMapApi) {
     $scope.search = null;
     $scope.mapReady = false;
-    $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 15 };
+    $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 6 };
 
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
@@ -20,6 +20,14 @@ angular.module('controllers', [])
             console.log('Got pos', pos);
             $scope.map.center.latitude = pos.coords.latitude;
             $scope.map.center.longitude = pos.coords.longitude;
+            $scope.map.position = {
+                id: 'position',
+                coords: {
+                    latitude: $scope.map.center.latitude,
+                    longitude: $scope.map.center.longitude
+                }
+            };
+            $scope.map.zoom = 15;
             $ionicLoading.hide();
         }, function(error) {
             alert('Unable to get location: ' + error.message);
