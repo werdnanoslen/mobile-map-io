@@ -3,7 +3,13 @@ angular.module('controllers', [])
 .controller('MapCtrl', function($scope, $ionicLoading, uiGmapGoogleMapApi) {
     $scope.search = null;
     $scope.mapReady = false;
-    $scope.map = { center: { latitude: 0, longitude: 0 }, zoom: 6 };
+    $scope.map = {
+        center: {
+            latitude: 0,
+            longitude: 0
+        },
+        zoom: 6
+    };
 
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
@@ -22,10 +28,7 @@ angular.module('controllers', [])
             $scope.map.center.longitude = pos.coords.longitude;
             $scope.map.position = {
                 id: 'position',
-                coords: {
-                    latitude: $scope.map.center.latitude,
-                    longitude: $scope.map.center.longitude
-                }
+                coords: $scope.map.center
             };
             $scope.map.zoom = 15;
             $ionicLoading.hide();
@@ -34,7 +37,7 @@ angular.module('controllers', [])
         });
     };
 
-    $scope.$on('g-places-autocomplete:select', function (event, place) {
+    $scope.$on('g-places-autocomplete:select', function(event, place) {
         $scope.place = place;
         $scope.loading = $ionicLoading.show({
             content: 'Getting location...',
