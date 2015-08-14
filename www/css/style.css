@@ -20,8 +20,9 @@ map {
 }
 #search label, #search input {
     font-size: 1em;
+    height: 37px;
     max-width: 25em;
-    padding: 0px 6px;
+    padding: 0px 10px;
     width: 100%;
 }
 #search label {
@@ -32,6 +33,6 @@ map {
 #centerOnMe {
     bottom: 6em;
     right: 19px;
-    width: auto;
-    height: auto;
+    width: 30px;
+    height: 50px;
 }

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('mobile-map-io', [
     'ionic',
     'ionic-material',

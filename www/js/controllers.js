@@ -1,12 +1,14 @@
 angular.module('controllers', [])
 
 .controller('MapCtrl', function($scope, $ionicLoading, uiGmapGoogleMapApi) {
-    $scope.search = null;
     $scope.mapReady = false;
     $scope.map = {
         center: {
             latitude: 0,
             longitude: 0
+        },
+        options: {
+            disableDefaultUI: true
         },
         zoom: 6
     };
@@ -28,7 +30,18 @@ angular.module('controllers', [])
             $scope.map.center.longitude = pos.coords.longitude;
             $scope.map.position = {
                 id: 'position',
-                coords: $scope.map.center
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillOpacity: 1.0,
+                    fillColor: '#4D90FE',
+                    strokeColor: '#ffffff',
+                    strokeWeight: 2.0,
+                    scale: 7
+                },
+                coords: {
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                }
             };
             $scope.map.zoom = 15;
             $ionicLoading.hide();
@@ -38,22 +51,22 @@ angular.module('controllers', [])
     };
 
     $scope.$on('g-places-autocomplete:select', function(event, place) {
-        $scope.place = place;
         $scope.loading = $ionicLoading.show({
             content: 'Getting location...',
             showBackdrop: false
         });
         var lat = place.geometry.location.lat();
         var lon = place.geometry.location.lng();
-        var placeLatLon = new google.maps.LatLng(lat, lon);
-        $scope.map.setCenter(placeLatLon);
-        if (undefined !== $scope.placeLatLon) {
-            $scope.placeMarker.setMap(null);
-        }
-        $scope.placeMarker = new google.maps.Marker({
-            map: $scope.map,
-            position: placeLatLon
-        });
+        $scope.map.center.latitude = lat;
+        $scope.map.center.longitude = lon;
+        $scope.map.search = {
+            id: 'search',
+            coords: {
+                latitude: lat,
+                longitude: lon
+            }
+        };
+        $scope.map.zoom = 15;
         $ionicLoading.hide();
     });
 });

@@ -15,19 +15,21 @@
         <ui-gmap-google-map
             center='map.center'
             control='map.control'
-            zoom='map.zoom'>
+            options='map.options'
+            zoom='map.zoom'
+        >
             <ui-gmap-marker
                 coords="map.position.coords"
-                options="map.position.options"
-                idKey="'map.position.id'">
+                idKey="'map.position.id'"
+                icon="map.position.icon"
+                options="map.position.options">
             </ui-gmap-marker>
-            <!-- <ui-gmap-marker
-                coords="search.coords"
-                options="search.options"
-                events="search.events"
-                idkey="search.id">
+            <ui-gmap-marker
+                coords="map.search.coords"
+                idkey="'map.search.id'"
+                options="map.search.options">
             </ui-gmap-marker>
-            <ui-gmap-markers
+            <!-- <ui-gmap-markers
                  models="reports.markers"
                  coords="self">
             </ui-gmap-markers> -->
