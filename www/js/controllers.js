@@ -69,4 +69,9 @@ angular.module('controllers', [])
         $scope.map.zoom = 15;
         $ionicLoading.hide();
     });
+})
+
+.controller('AddCtrl', function($scope, $ionicLoading, uiGmapGoogleMapApi, $stateParams) {
+    $scope.title = $stateParams.title;
+    console.log('ready');
 });

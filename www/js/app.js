@@ -2,7 +2,6 @@
 
 angular.module('mobile-map-io', [
     'ionic',
-    'ionic-material',
     'uiGmapgoogle-maps',
     'google.places',
     'controllers',
@@ -19,6 +18,10 @@ angular.module('mobile-map-io', [
         url: '/map',
         templateUrl: 'templates/map.html',
         controller: 'MapCtrl'
+    }).state('add', {
+        url: '/add',
+        templateUrl: 'templates/add.html',
+        controller: 'AddCtrl'
     });
 
     $urlRouterProvider.otherwise('/map');
