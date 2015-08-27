@@ -18,10 +18,18 @@ angular.module('mobile-map-io', [
         url: '/map',
         templateUrl: 'templates/map.html',
         controller: 'MapCtrl'
+    }).state('list', {
+        url: '/list',
+        templateUrl: 'templates/list.html',
+        controller: 'ListCtrl'
     }).state('add', {
         url: '/add',
         templateUrl: 'templates/add.html',
         controller: 'AddCtrl'
+    }).state('report', {
+        url: '/report',
+        templateUrl: 'templates/report.html',
+        controller: 'ReportCtrl'
     });
 
     $urlRouterProvider.otherwise('/map');

@@ -2,10 +2,16 @@ angular.module('controllers', [])
 
 .controller('MapCtrl', function($scope, $ionicLoading, uiGmapGoogleMapApi) {
     $scope.mapReady = false;
+    $scope.searchBarVisible = false;
     $scope.map = {
         center: {
             latitude: 0,
             longitude: 0
+        },
+        events: {
+            dragstart: function(map) {
+                $scope.searchBarVisible = false;
+            }
         },
         options: {
             disableDefaultUI: true
@@ -71,7 +77,15 @@ angular.module('controllers', [])
     });
 })
 
+.controller('ListCtrl', function($scope, $ionicLoading) {
+    console.log('ready');
+})
+
 .controller('AddCtrl', function($scope, $ionicLoading, uiGmapGoogleMapApi, $stateParams) {
     $scope.title = $stateParams.title;
+    console.log('ready');
+})
+
+.controller('ReportCtrl', function($scope, $ionicLoading) {
     console.log('ready');
 });

@@ -1,0 +1,24 @@
+<ion-view view-title="Nearby">
+    <ion-nav-bar align-title="center" class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button button-icon icon ion-map" ui-sref="map"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class="button button-icon icon ion-ios-color-filter-outline" ng-click="showFilters()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-content scroll="false">
+        <div class="list">
+            <a class="item" ui-sref='report'>
+                Slim shady
+                <span class="item-note">
+                    12 km
+                </span>
+            </a>
+        </div>
+        <button id="addReport"
+            ui-sref="add"
+            class="button button-assertive icon ion-plus">
+        </button>
+    </ion-content>
+</ion-view>

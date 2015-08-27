@@ -1,4 +1,13 @@
 <ion-view view-title="Map">
+    <ion-nav-bar align-title="center" class="bar-positive">
+        <ion-nav-buttons side="left">
+            <button class="button button-icon icon ion-ios-list-outline" ui-sref="list"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+            <button class="button button-icon icon ion-ios-search" ng-click="searchBarVisible = true" ng-show="mapReady"></button>
+            <button class="button button-icon icon ion-ios-color-filter-outline" ng-click="showFilters()"></button>
+        </ion-nav-buttons>
+    </ion-nav-bar>
     <ion-content scroll="false">
         <div id="search" class="item item-input-inset">
             <label class="item-input-wrapper">
@@ -7,7 +16,7 @@
                     placeholder="Search for a place"
                     g-places-autocomplete
                     ng-model="search"
-                    ng-show="mapReady"
+                    ng-show="searchBarVisible"
                 />
             </label>
         </div>
@@ -15,6 +24,7 @@
         <ui-gmap-google-map
             center='map.center'
             control='map.control'
+            events='map.events'
             options='map.options'
             zoom='map.zoom'
         >
