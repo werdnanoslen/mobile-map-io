@@ -45,3 +45,6 @@ map {
 #addReport {
     bottom: 1em;
 }
+#addForm input {
+    padding-left: 1em;
+}
