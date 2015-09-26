@@ -116,7 +116,7 @@ angular.module('controllers', [])
         options: {
             disableDefaultUI: true
         },
-        zoom: 6,
+        zoom: 6
     };
 
     uiGmapGoogleMapApi.then(function(uiMap) {
