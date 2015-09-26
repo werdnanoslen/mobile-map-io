@@ -51,3 +51,11 @@ map {
 #addForm input {
     padding-left: 1em;
 }
+#mainContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#mapContainer {
+  flex: 2;
+}
