@@ -99,6 +99,8 @@ angular.module('controllers', [])
                     geocoder.geocode({'location': latlng}, function(results, status) {
                         if (status === google.maps.GeocoderStatus.OK) {
                             $scope.search = results[0].formatted_address;
+                            //TODO: handle scope updates to async model better than this
+                            $scope.$apply();
                         }
                     });
                 };
