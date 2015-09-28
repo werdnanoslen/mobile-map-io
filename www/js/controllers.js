@@ -93,19 +93,20 @@ angular.module('controllers', [])
         events: {
             idle: function(map) {
                 // after pan/zoom: update search bar to reflect new location
-                // to do: what to put in search box if we don't find an address?
-                var updateAddress = function(map) {
-                    var latlng = map.getCenter();
-                    geocoder.geocode({'location': latlng}, function(results, status) {
-                        if (status === google.maps.GeocoderStatus.OK) {
-                            $scope.search = results[0].formatted_address;
-                            //TODO: handle scope updates to async model better than this
-                            $scope.$apply();
+                var latlng = map.getCenter();
+                geocoder.geocode({'location': latlng}, function(results, status) {
+                    var topResult = results[0];
+                    if (google.maps.GeocoderStatus.OK === status) {
+                        if ("ROOFTOP" === topResult.geometry.location_type) {
+                            $scope.search = topResult.formatted_address;
+                        } else {
+                            console.log('No exact address for this location: ', latlng);
+                            $scope.search = latlng.toUrlValue();
                         }
-                    });
-                };
-                console.log('updating address');
-                updateAddress(map);
+                        //TODO: handle scope updates to async model better than this
+                        $scope.$apply();
+                    }
+                });
             }
         },
         options: {
