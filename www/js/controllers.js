@@ -103,9 +103,12 @@ angular.module('controllers', [])
                             console.log('No exact address for this location: ', latlng);
                             $scope.search = latlng.toUrlValue();
                         }
-                        //TODO: handle scope updates to async model better than this
-                        $scope.$apply();
+                    } else {
+                        console.error('geocode error: ', status);
+                        $scope.search = latlng.toUrlValue();
                     }
+                    //TODO: handle scope updates to async model better than this
+                    $scope.$apply();
                 });
             }
         },
