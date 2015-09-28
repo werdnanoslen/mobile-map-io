@@ -82,6 +82,8 @@ angular.module('controllers', [])
 })
 
 .controller('AddCtrl', function($scope, $ionicHistory, $ionicLoading, uiGmapGoogleMapApi) {
+    var geocoder = new google.maps.Geocoder();
+
     $scope.mapReady = false;
     $scope.map = {
         center: {
@@ -89,8 +91,19 @@ angular.module('controllers', [])
             longitude: 0
         },
         events: {
-            dragstart: function(map) {
-                console.log('what a drag...');
+            idle: function(map) {
+                // after pan/zoom: update search bar to reflect new location
+                // to do: what to put in search box if we don't find an address?
+                var updateAddress = function(map) {
+                    var latlng = map.getCenter();
+                    geocoder.geocode({'location': latlng}, function(results, status) {
+                        if (status === google.maps.GeocoderStatus.OK) {
+                            $scope.search = results[0].formatted_address;
+                        }
+                    });
+                };
+                console.log('updating address');
+                updateAddress(map);
             }
         },
         options: {
@@ -102,6 +115,13 @@ angular.module('controllers', [])
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
         $scope.centerOnMe();
+        var gmap = document.getElementsByClassName('angular-google-map-container')[0];
+
+        // inject a marker, fixed to the center of the map
+        var div = document.getElementById('mapContainer');
+        var node = document.createElement('div');
+        node.id = 'centerMarker';
+        div.appendChild(node);
     });
 
     $scope.centerOnMe = function() {
@@ -114,8 +134,23 @@ angular.module('controllers', [])
             console.log('Got pos', pos);
             $scope.map.center.latitude = pos.coords.latitude;
             $scope.map.center.longitude = pos.coords.longitude;
+            // $scope.map.reportMarker = {
+            //     id: 'report',
+            //     coords: {
+            //         latitude: pos.coords.latitude,
+            //         longitude: pos.coords.longitude
+            //     }
+            // };
             $scope.map.position = {
                 id: 'position',
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillOpacity: 1.0,
+                    fillColor: '#4D90FE',
+                    strokeColor: '#ffffff',
+                    strokeWeight: 2.0,
+                    scale: 7
+                },
                 coords: {
                     latitude: pos.coords.latitude,
                     longitude: pos.coords.longitude

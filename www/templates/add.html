@@ -8,53 +8,60 @@
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content scroll="false">
-        <form class="list" id="addForm">
-            <label class="item item-input">
-                <i class="icon ion-android-time"></i>
-                <input type="date">
-                <input type="time">
-            </label>
-            <label class="item item-input">
-                <i class="icon ion-person"></i>
-                <input type="text" placeholder="Who?">
-            </label>
-            <label class="item item-input">
-                <span>Rs</span>
-                <input type="number">
-            </label>
-            <label class="item item-input">
-                <i class="icon ion-android-textsms"></i>
-                <input type="text" placeholder="What?">
-            </label>
-            <label class="item item-input">
-                <i class="icon ion-location"></i>
-                <input
-                    type="search"
-                    placeholder="Where?"
-                    g-places-autocomplete
-                    ng-model="search"
-                />
-            </label>
-        </form>
+        <div id="mainContainer">
+            <div id="formContainer">
+                <form class="list" id="addForm">
+                    <label class="item item-input">
+                        <i class="icon ion-android-time"></i>
+                        <input type="date">
+                        <input type="time">
+                    </label>
+                    <label class="item item-input">
+                        <i class="icon ion-person"></i>
+                        <input type="text" placeholder="Who?">
+                    </label>
+                    <label class="item item-input">
+                        <span>Rs</span>
+                        <input type="number">
+                    </label>
+                    <label class="item item-input">
+                        <i class="icon ion-android-textsms"></i>
+                        <input type="text" placeholder="What?">
+                    </label>
+                    <label class="item item-input">
+                        <i class="icon ion-location"></i>
+                        <input
+                           type="search"
+                           placeholder="Where?"
+                           g-places-autocomplete
+                           ng-model="search"
+                           />
+                    </label>
+                </form>
+            </div>
 
-        <ui-gmap-google-map
-            center='map.center'
-            control='map.control'
-            events='map.events'
-            options='map.options'
-            zoom='map.zoom'
-        >
-            <ui-gmap-marker
-                coords="map.search.coords"
-                idkey="'map.search.id'"
-                options="map.search.options">
-            </ui-gmap-marker>
-        </ui-gmap-google-map>
+            <div id="mapContainer">
+                <ui-gmap-google-map
+                 center='map.center'
+                 control='map.control'
+                 events='map.events'
+                 options='map.options'
+                 zoom='map.zoom'
+                 >
+                    <ui-gmap-marker
+                 coords="map.position.coords"
+                 idkey="'map.position.id'"
+                 icon="map.position.icon"
+                 options="map.position.options">
+                    </ui-gmap-marker>
+                </ui-gmap-google-map>
+            </div>
+        </div>
 
         <button id="centerOnMe"
-            ng-click="centerOnMe()"
-            ng-show="mapReady"
-            class="button button-light icon ion-pinpoint">
+                ng-click="centerOnMe()"
+                ng-show="mapReady"
+                class="button button-light icon ion-pinpoint">
         </button>
     </ion-content>
 </ion-view>
