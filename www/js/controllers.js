@@ -121,6 +121,8 @@ angular.module('controllers', [])
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
         $scope.centerOnMe();
+        suppressInfoWindows();
+
         var gmap = document.getElementsByClassName('angular-google-map-container')[0];
 
         // inject a marker, fixed to the center of the map
@@ -188,6 +190,25 @@ angular.module('controllers', [])
         $scope.map.zoom = 17;
         $ionicLoading.hide();
     });
+
+    // Suppress info windows
+    // Source: http://stackoverflow.com/a/19710396
+    function suppressInfoWindows() {
+        //Here we redefine set() method.
+        //If it is called for map option, we hide InfoWindow, if "noSupress" option isnt true.
+        //As Google doesn't know about this option, its InfoWindows will not be opened.
+        var set = google.maps.InfoWindow.prototype.set;
+        google.maps.InfoWindow.prototype.set = function (key, val) {
+            if (key === 'map') {
+                if (!this.get('noSupress')) {
+                    console.log('This InfoWindow is supressed. To enable it, set "noSupress" option to true');
+                    return;
+                }
+            }
+            set.apply(this, arguments);
+        }
+    }
+
 })
 
 .controller('ReportCtrl', function($scope) {
