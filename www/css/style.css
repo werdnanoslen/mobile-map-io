@@ -1,3 +1,10 @@
+.flex {
+    display: flex;
+}
+.flex > .flex-item {
+    flex: auto;
+}
+
 map {
     display: block;
     width: 100%;
@@ -12,18 +19,6 @@ map {
 .angular-google-map-container {
     position: absolute;
     height: 100%;
-    width: 100%;
-}
-#search {
-    background: none;
-    border: none;
-    position: absolute;
-}
-#search label, #search input {
-    font-size: 1em;
-    height: 37px;
-    max-width: 25em;
-    padding: 0px 10px;
     width: 100%;
 }
 #search label {
@@ -75,4 +70,12 @@ map {
     height: 34px;
     width: 20px;
     cursor: pointer;
+}
+#searchBar {
+    line-height: 2;
+}
+#searchBar input {
+    font: inherit;
+    margin-left: 10px;
+    padding: 0px 4px;
 }

@@ -7,26 +7,21 @@
             </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-            <button class="button button-icon icon ion-ios-search"
-                    ng-click="toggleSearch()"
-                    ng-show="mapReady">
-            </button>
             <button class="button button-icon icon ion-ios-color-filter-outline"
                     ng-click="showFilters()">
             </button>
         </ion-nav-buttons>q
     </ion-nav-bar>
     <ion-content scroll="false">
-        <div id="search" class="item item-input-inset">
-            <label class="item-input-wrapper">
-                <input
-                    type="search"
-                    placeholder="Search for a place"
-                    g-places-autocomplete
-                    ng-model="search"
-                    ng-show="searchBarVisible"
-                />
-            </label>
+        <div class="item item-divider flex" id="searchBar">
+            Reports near
+            <input
+                class="flex-item"
+                type="search"
+                g-places-autocomplete
+                ng-model="search.place"
+                ng-show="mapReady"
+            />
         </div>
 
         <ui-gmap-google-map

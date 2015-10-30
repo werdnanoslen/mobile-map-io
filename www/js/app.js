@@ -8,8 +8,9 @@ angular.module('mobile-map-io', [
     'directives'
 ])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function() {
+        $rootScope.search = {};
     });
 })
 

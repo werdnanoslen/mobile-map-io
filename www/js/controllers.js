@@ -1,6 +1,6 @@
 angular.module('controllers', [])
 
-.controller('MapCtrl', function($scope, $ionicLoading, uiGmapGoogleMapApi) {
+.controller('MapCtrl', function($scope, $rootScope, $ionicLoading, uiGmapGoogleMapApi) {
     $scope.mapReady = false;
     $scope.searchBarVisible = false;
     $scope.map = {
@@ -21,19 +21,33 @@ angular.module('controllers', [])
 
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
-        $scope.centerOnMe();
+        $scope.centerMap();
     });
 
+    $scope.$on('$stateChangeSuccess', function(event,toState,toParams,fromState) {
+        // "" for name indicates that it's the initial transition.
+        // Not ideal, but that's how Angular works atm :/
+        // https://github.com/angular-ui/ui-router/issues/1307#issuecomment-59570535
+        if ("" !== fromState.name && "map" === toState.name) {
+            if ($scope.mapReady) {
+                $scope.centerMap();
+            }
+        }
+    })
+
     $scope.centerOnMe = function() {
-        console.log("Centering");
+        console.log('Getting current location');
         $scope.loading = $ionicLoading.show({
             content: 'Getting current location...',
             showBackdrop: false
         });
         navigator.geolocation.getCurrentPosition(function(pos) {
             console.log('Got pos', pos);
-            $scope.map.center.latitude = pos.coords.latitude;
-            $scope.map.center.longitude = pos.coords.longitude;
+            var lat = pos.coords.latitude;
+            var lng = pos.coords.longitude;
+            $scope.search.place = "My location";
+            $scope.search.lat = lat;
+            $scope.search.lng = lng;
             $scope.map.position = {
                 id: 'position',
                 icon: {
@@ -45,19 +59,26 @@ angular.module('controllers', [])
                     scale: 7
                 },
                 coords: {
-                    latitude: pos.coords.latitude,
-                    longitude: pos.coords.longitude
+                    latitude: $scope.search.lat,
+                    longitude: $scope.search.lng
                 }
             };
-            $scope.map.zoom = 15;
+            $scope.centerMap();
             $ionicLoading.hide();
         }, function(error) {
             alert('Unable to get location: ' + error.message);
         });
     };
 
-    $scope.toggleSearch = function() {
-        $scope.searchBarVisible = !$scope.searchBarVisible;
+    $scope.centerMap = function() {
+        console.log("Centering");
+        if (Object.keys($scope.search).length === 0) {
+            $scope.centerOnMe();
+        } else {
+            $scope.map.center.latitude = $scope.search.lat;
+            $scope.map.center.longitude = $scope.search.lng;
+            $scope.map.zoom = 15;
+        }
     };
 
     $scope.$on('g-places-autocomplete:select', function(event, place) {
@@ -66,23 +87,37 @@ angular.module('controllers', [])
             showBackdrop: false
         });
         var lat = place.geometry.location.lat();
-        var lon = place.geometry.location.lng();
-        $scope.map.center.latitude = lat;
-        $scope.map.center.longitude = lon;
+        var lng = place.geometry.location.lng();
+        $scope.search.place = place;
+        $scope.search.lat = lat;
+        $scope.search.lng = lng;
         $scope.map.search = {
             id: 'search',
             coords: {
-                latitude: lat,
-                longitude: lon
+                latitude: $scope.search.lat,
+                longitude: $scope.search.lng
             }
         };
-        $scope.map.zoom = 15;
+        $scope.centerMap();
         $ionicLoading.hide();
     });
 })
 
-.controller('ListCtrl', function($scope) {
+.controller('ListCtrl', function($scope, $rootScope, $ionicLoading) {
     console.log('ready');
+
+    $scope.$on('g-places-autocomplete:select', function(event, place) {
+        $scope.loading = $ionicLoading.show({
+            content: 'Getting location...',
+            showBackdrop: false
+        });
+        var lat = place.geometry.location.lat();
+        var lng = place.geometry.location.lng();
+        $scope.search.place = place;
+        $scope.search.lat = lat;
+        $scope.search.lng = lng;
+        $ionicLoading.hide();
+    });
 })
 
 .controller('AddCtrl', function($scope, $ionicHistory, $ionicLoading, uiGmapGoogleMapApi) {

@@ -14,6 +14,15 @@
     </ion-nav-bar>
     <ion-content scroll="false">
         <div class="list">
+            <div class="item item-divider flex" id="searchBar">
+                Reports near
+                <input
+                    class="flex-item"
+                    type="search"
+                    g-places-autocomplete
+                    ng-model="search.place"
+                />
+            </div>
             <a class="item" ui-sref='report'>
                 Slim shady
                 <span class="item-note">
