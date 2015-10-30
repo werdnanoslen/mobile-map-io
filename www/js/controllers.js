@@ -114,7 +114,7 @@ angular.module('controllers', [])
     });
 })
 
-.controller('AddCtrl', function($scope, $ionicHistory, $ionicLoading, uiGmapGoogleMapApi) {
+.controller('AddCtrl', function($scope, $rootScope, $ionicLoading, uiGmapGoogleMapApi) {
     var geocoder = new google.maps.Geocoder();
 
     $scope.mapReady = false;
@@ -131,15 +131,17 @@ angular.module('controllers', [])
                     var topResult = results[0];
                     if (google.maps.GeocoderStatus.OK === status) {
                         if ("ROOFTOP" === topResult.geometry.location_type) {
-                            $scope.search = topResult.formatted_address;
+                            $scope.search.place = topResult.formatted_address;
                         } else {
                             console.log('No exact address for this location: ', latlng);
-                            $scope.search = latlng.toUrlValue();
+                            $scope.search.place = latlng.toUrlValue();
                         }
                     } else {
                         console.error('geocode error: ', status);
-                        $scope.search = latlng.toUrlValue();
+                        $scope.search.place = latlng.toUrlValue();
                     }
+                    $scope.search.lat = latlng.lat;
+                    $scope.search.lng = latlng.lng;
                     //TODO: handle scope updates to async model better than this
                     $scope.$apply();
                 });
@@ -148,40 +150,26 @@ angular.module('controllers', [])
         options: {
             disableDefaultUI: true
         },
-        zoom: 6
+        zoom: 15
     };
 
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
-        $scope.centerOnMe();
+        $scope.centerMap();
         suppressInfoWindows();
-
-        var gmap = document.getElementsByClassName('angular-google-map-container')[0];
-
-        // inject a marker, fixed to the center of the map
-        var div = document.getElementById('mapContainer');
-        var node = document.createElement('div');
-        node.id = 'centerMarker';
-        div.appendChild(node);
     });
 
     $scope.centerOnMe = function() {
-        console.log("Centering");
+        console.log('Getting current location');
         $scope.loading = $ionicLoading.show({
             content: 'Getting current location...',
             showBackdrop: false
         });
         navigator.geolocation.getCurrentPosition(function(pos) {
             console.log('Got pos', pos);
-            $scope.map.center.latitude = pos.coords.latitude;
-            $scope.map.center.longitude = pos.coords.longitude;
-            // $scope.map.reportMarker = {
-            //     id: 'report',
-            //     coords: {
-            //         latitude: pos.coords.latitude,
-            //         longitude: pos.coords.longitude
-            //     }
-            // };
+            $scope.search.place = "My location";
+            $scope.search.lat = pos.coords.latitude;
+            $scope.search.lng = pos.coords.longitude;
             $scope.map.position = {
                 id: 'position',
                 icon: {
@@ -193,15 +181,26 @@ angular.module('controllers', [])
                     scale: 7
                 },
                 coords: {
-                    latitude: pos.coords.latitude,
-                    longitude: pos.coords.longitude
+                    latitude: $scope.search.lat,
+                    longitude: $scope.search.lng
                 }
             };
-            $scope.map.zoom = 17;
+            $scope.centerMap();
             $ionicLoading.hide();
         }, function(error) {
             alert('Unable to get location: ' + error.message);
         });
+    };
+
+    $scope.centerMap = function() {
+        console.log("Centering");
+        if (Object.keys($scope.search).length === 0) {
+            $scope.centerOnMe();
+        } else {
+            $scope.map.center.latitude = $scope.search.lat;
+            $scope.map.center.longitude = $scope.search.lng;
+            $scope.map.zoom = 15;
+        }
     };
 
     $scope.$on('g-places-autocomplete:select', function(event, place) {
@@ -209,18 +208,10 @@ angular.module('controllers', [])
             content: 'Getting location...',
             showBackdrop: false
         });
-        var lat = place.geometry.location.lat();
-        var lon = place.geometry.location.lng();
-        $scope.map.center.latitude = lat;
-        $scope.map.center.longitude = lon;
-        $scope.map.search = {
-            id: 'search',
-            coords: {
-                latitude: lat,
-                longitude: lon
-            }
-        };
-        $scope.map.zoom = 17;
+        $scope.search.place = place;
+        $scope.search.lat = place.geometry.location.lat();
+        $scope.search.lng = place.geometry.location.lng();
+        $scope.centerMap();
         $ionicLoading.hide();
     });
 

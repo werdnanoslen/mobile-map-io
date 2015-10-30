@@ -15,12 +15,11 @@
     <ion-content scroll="false">
         <div class="item item-divider flex" id="searchBar">
             Reports near
-            <input
-                class="flex-item"
-                type="search"
-                g-places-autocomplete
-                ng-model="search.place"
-                ng-show="mapReady"
+            <input  class="flex-item"
+                    type="search"
+                    g-places-autocomplete
+                    ng-model="search.place"
+                    ng-show="mapReady"
             />
             <button class="button button-small button-icon icon ion-pinpoint"
                     ng-click="centerOnMe()"
@@ -33,8 +32,7 @@
             control='map.control'
             events='map.events'
             options='map.options'
-            zoom='map.zoom'
-        >
+            zoom='map.zoom'>
             <ui-gmap-marker
                 coords="map.position.coords"
                 idKey="'map.position.id'"
@@ -51,10 +49,5 @@
                  coords="self">
             </ui-gmap-markers> -->
         </ui-gmap-google-map>
-
-        <button id="addReport"
-            ui-sref="add"
-            class="button button-assertive icon ion-plus">
-        </button>
     </ion-content>
 </ion-view>
