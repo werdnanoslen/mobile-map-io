@@ -1,10 +1,15 @@
 <ion-view view-title="Nearby">
     <ion-nav-bar align-title="center" class="bar-positive">
         <ion-nav-buttons side="left">
-            <button class="button button-icon icon ion-map" ui-sref="map"></button>
+            <button class="button button-icon icon ion-map"
+                    ui-sref="map"
+                    nav-direction="swap">
+            </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-            <button class="button button-icon icon ion-ios-color-filter-outline" ng-click="showFilters()"></button>
+            <button class="button button-icon icon ion-ios-color-filter-outline"
+                    ng-click="showFilters()">
+            </button>
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content scroll="false">

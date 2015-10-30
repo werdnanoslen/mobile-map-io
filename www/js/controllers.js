@@ -56,6 +56,10 @@ angular.module('controllers', [])
         });
     };
 
+    $scope.toggleSearch = function() {
+        $scope.searchBarVisible = !$scope.searchBarVisible;
+    };
+
     $scope.$on('g-places-autocomplete:select', function(event, place) {
         $scope.loading = $ionicLoading.show({
             content: 'Getting location...',
