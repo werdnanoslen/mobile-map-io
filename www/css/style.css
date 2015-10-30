@@ -21,24 +21,16 @@ map {
     height: 100%;
     width: 100%;
 }
-#search label {
-    background-color: #fff;
-    box-shadow: 0px 1px 2px 0 rgba(0, 0, 0, 0.26);
-    padding: 0;
+#searchBar {
+    line-height: 2;
 }
-#centerOnMe, #addReport {
-    border-radius: 50%;
-    box-shadow: 0px 1px 2px 0px #333;
-    height: 3.1em;
-    position: absolute;
-    right: 10px;
+#searchBar input {
+    font: inherit;
+    margin-left: 10px;
+    padding: 0px 4px;
 }
-#centerOnMe {
-    bottom: 5em;
-    right: 11px;
-}
-#addReport {
-    bottom: 1em;
+#searchBar button {
+    padding-right: 0;
 }
 #addForm {
     margin-bottom: 0;
@@ -70,12 +62,4 @@ map {
     height: 34px;
     width: 20px;
     cursor: pointer;
-}
-#searchBar {
-    line-height: 2;
-}
-#searchBar input {
-    font: inherit;
-    margin-left: 10px;
-    padding: 0px 4px;
 }

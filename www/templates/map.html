@@ -7,10 +7,10 @@
             </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-            <button class="button button-icon icon ion-ios-color-filter-outline"
-                    ng-click="showFilters()">
+            <button class="button button-icon button-clear icon ion-plus"
+                    ui-sref="add">
             </button>
-        </ion-nav-buttons>q
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content scroll="false">
         <div class="item item-divider flex" id="searchBar">
@@ -22,6 +22,10 @@
                 ng-model="search.place"
                 ng-show="mapReady"
             />
+            <button class="button button-small button-icon icon ion-pinpoint"
+                    ng-click="centerOnMe()"
+                    ng-show="mapReady">
+            </button>
         </div>
 
         <ui-gmap-google-map
@@ -47,12 +51,6 @@
                  coords="self">
             </ui-gmap-markers> -->
         </ui-gmap-google-map>
-
-        <button id="centerOnMe"
-            ng-click="centerOnMe()"
-            ng-show="mapReady"
-            class="button button-light icon ion-pinpoint">
-        </button>
 
         <button id="addReport"
             ui-sref="add"

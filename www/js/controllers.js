@@ -43,11 +43,9 @@ angular.module('controllers', [])
         });
         navigator.geolocation.getCurrentPosition(function(pos) {
             console.log('Got pos', pos);
-            var lat = pos.coords.latitude;
-            var lng = pos.coords.longitude;
             $scope.search.place = "My location";
-            $scope.search.lat = lat;
-            $scope.search.lng = lng;
+            $scope.search.lat = pos.coords.latitude;
+            $scope.search.lng = pos.coords.longitude;
             $scope.map.position = {
                 id: 'position',
                 icon: {
@@ -86,11 +84,9 @@ angular.module('controllers', [])
             content: 'Getting location...',
             showBackdrop: false
         });
-        var lat = place.geometry.location.lat();
-        var lng = place.geometry.location.lng();
         $scope.search.place = place;
-        $scope.search.lat = lat;
-        $scope.search.lng = lng;
+        $scope.search.lat = place.geometry.location.lat();
+        $scope.search.lng = place.geometry.location.lng();
         $scope.map.search = {
             id: 'search',
             coords: {
@@ -111,11 +107,9 @@ angular.module('controllers', [])
             content: 'Getting location...',
             showBackdrop: false
         });
-        var lat = place.geometry.location.lat();
-        var lng = place.geometry.location.lng();
         $scope.search.place = place;
-        $scope.search.lat = lat;
-        $scope.search.lng = lng;
+        $scope.search.lat = place.geometry.location.lat();
+        $scope.search.lng = place.geometry.location.lng();
         $ionicLoading.hide();
     });
 })
