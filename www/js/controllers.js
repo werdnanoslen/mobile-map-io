@@ -8,20 +8,16 @@ angular.module('controllers', [])
             latitude: 0,
             longitude: 0
         },
-        events: {
-            dragstart: function(map) {
-                $scope.searchBarVisible = false;
-            }
-        },
         options: {
             disableDefaultUI: true
         },
-        zoom: 6
+        zoom: 15
     };
 
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
         $scope.centerMap();
+        $scope.overrideInfoWindowClick();
     });
 
     $scope.$on('$stateChangeSuccess', function(event,toState,toParams,fromState) {
@@ -75,7 +71,6 @@ angular.module('controllers', [])
         } else {
             $scope.map.center.latitude = $scope.search.lat;
             $scope.map.center.longitude = $scope.search.lng;
-            $scope.map.zoom = 15;
         }
     };
 
@@ -97,6 +92,26 @@ angular.module('controllers', [])
         $scope.centerMap();
         $ionicLoading.hide();
     });
+
+    $scope.overrideInfoWindowClick = function() {
+        var set = google.maps.InfoWindow.prototype.set;
+        google.maps.InfoWindow.prototype.set = function (key, val) {
+            if (key === 'map') {
+                if (!this.get('noSupress')) {
+                    var nodes = this.content.childNodes;
+                    var name = nodes[0].innerHTML;
+                    var address = nodes[1].childNodes[0].innerHTML;
+                    $scope.search.place = name + ", " + address;
+                    $scope.search.lat = this.position.lat();
+                    $scope.search.lng = this.position.lng();
+                    $scope.centerMap();
+                    $scope.$apply();
+                    return;
+                }
+            }
+            set.apply(this, arguments);
+        }
+    };
 })
 
 .controller('ListCtrl', function($scope, $rootScope, $ionicLoading) {
@@ -116,6 +131,8 @@ angular.module('controllers', [])
 
 .controller('AddCtrl', function($scope, $rootScope, $ionicLoading, uiGmapGoogleMapApi) {
     var geocoder = new google.maps.Geocoder();
+    // hacked because gmap's events don't include infowindow clicks
+    $scope.centerSetByPlaceClick = false;
 
     $scope.mapReady = false;
     $scope.map = {
@@ -125,26 +142,29 @@ angular.module('controllers', [])
         },
         events: {
             idle: function(map) {
-                // after pan/zoom: update search bar to reflect new location
-                var latlng = map.getCenter();
-                geocoder.geocode({'location': latlng}, function(results, status) {
-                    var topResult = results[0];
-                    if (google.maps.GeocoderStatus.OK === status) {
-                        if ("ROOFTOP" === topResult.geometry.location_type) {
-                            $scope.search.place = topResult.formatted_address;
+                if ($scope.centerSetByPlaceClick) {
+                    $scope.centerSetByPlaceClick = false;
+                } else {
+                    var latlng = map.getCenter();
+                    geocoder.geocode({'location': latlng}, function(results, status) {
+                        var topResult = results[0];
+                        if (google.maps.GeocoderStatus.OK === status) {
+                            if ("ROOFTOP" === topResult.geometry.location_type) {
+                                $scope.search.place = topResult.formatted_address;
+                            } else {
+                                console.log('No exact address for this location: ', latlng);
+                                $scope.search.place = latlng.toUrlValue();
+                            }
                         } else {
-                            console.log('No exact address for this location: ', latlng);
+                            console.error('geocode error: ', status);
                             $scope.search.place = latlng.toUrlValue();
                         }
-                    } else {
-                        console.error('geocode error: ', status);
-                        $scope.search.place = latlng.toUrlValue();
-                    }
-                    $scope.search.lat = latlng.lat;
-                    $scope.search.lng = latlng.lng;
-                    //TODO: handle scope updates to async model better than this
-                    $scope.$apply();
-                });
+                        $scope.search.lat = latlng.lat;
+                        $scope.search.lng = latlng.lng;
+                        //TODO: handle scope updates to async model better than this
+                        $scope.$apply();
+                    });
+                }
             }
         },
         options: {
@@ -156,7 +176,7 @@ angular.module('controllers', [])
     uiGmapGoogleMapApi.then(function(uiMap) {
         $scope.mapReady = true;
         $scope.centerMap();
-        suppressInfoWindows();
+        $scope.overrideInfoWindowClick();
     });
 
     $scope.centerOnMe = function() {
@@ -199,7 +219,6 @@ angular.module('controllers', [])
         } else {
             $scope.map.center.latitude = $scope.search.lat;
             $scope.map.center.longitude = $scope.search.lng;
-            $scope.map.zoom = 15;
         }
     };
 
@@ -215,24 +234,26 @@ angular.module('controllers', [])
         $ionicLoading.hide();
     });
 
-    // Suppress info windows
-    // Source: http://stackoverflow.com/a/19710396
-    function suppressInfoWindows() {
-        //Here we redefine set() method.
-        //If it is called for map option, we hide InfoWindow, if "noSupress" option isnt true.
-        //As Google doesn't know about this option, its InfoWindows will not be opened.
+    $scope.overrideInfoWindowClick = function() {
         var set = google.maps.InfoWindow.prototype.set;
         google.maps.InfoWindow.prototype.set = function (key, val) {
             if (key === 'map') {
                 if (!this.get('noSupress')) {
-                    console.log('This InfoWindow is supressed. To enable it, set "noSupress" option to true');
+                    var nodes = this.content.childNodes;
+                    var name = nodes[0].innerHTML;
+                    var address = nodes[1].childNodes[0].innerHTML;
+                    $scope.search.place = name + ", " + address;
+                    $scope.search.lat = this.position.lat();
+                    $scope.search.lng = this.position.lng();
+                    $scope.centerSetByPlaceClick = true;
+                    $scope.centerMap();
+                    $scope.$apply();
                     return;
                 }
             }
             set.apply(this, arguments);
         }
-    }
-
+    };
 })
 
 .controller('ReportCtrl', function($scope) {
