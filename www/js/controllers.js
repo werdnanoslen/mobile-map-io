@@ -84,7 +84,7 @@ angular.module('controllers', [])
             content: 'Getting location...',
             showBackdrop: false
         });
-        $scope.search.place = place;
+        $scope.search.place = place.name + ", " + place.formatted_address;
         $scope.search.lat = place.geometry.location.lat();
         $scope.search.lng = place.geometry.location.lng();
         $scope.map.search = {
@@ -107,7 +107,7 @@ angular.module('controllers', [])
             content: 'Getting location...',
             showBackdrop: false
         });
-        $scope.search.place = place;
+        $scope.search.place = place.name + ", " + place.formatted_address;
         $scope.search.lat = place.geometry.location.lat();
         $scope.search.lng = place.geometry.location.lng();
         $ionicLoading.hide();
