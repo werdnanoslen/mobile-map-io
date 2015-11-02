@@ -33,11 +33,10 @@ map {
     padding-right: 0;
     margin-right: -6px;
 }
-#addForm {
-    margin-bottom: 0;
-}
-#addForm input {
+#addForm input,
+#reportDetails span {
     padding-left: 1em;
+    overflow: auto;
 }
 #mainContainer {
     height: 100%;

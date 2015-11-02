@@ -1,10 +1,45 @@
 <ion-view view-title="Report">
     <ion-nav-bar align-title="center" class="bar-positive">
-        <ion-nav-back-button></ion-nav-back-button>
         <ion-nav-buttons side="right">
-            <button class="button button-icon icon ion-map" ui-sref="map"></button>
+            <button class="button button-icon icon ion-map"
+                    ui-sref="map">
+            </button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content scroll="false">
+    <ion-content scroll="false" id="mainContainer">
+        <div id="formContainer">
+            <form class="list" id="reportDetails">
+                <label class="item item-input">
+                    <i class="icon ion-android-time"></i>
+                    <span>{{date}}, {{time}}</span>
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-social-bitcoin"></i>
+                    <span>{{number}}</span>
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-android-textsms"></i>
+                    <span>{{sometext}}</span>
+                </label>
+                <label class="item item-input">
+                    <i class="icon ion-location"></i>
+                    <span>{{place}}</span>
+                </label>
+            </form>
+        </div>
+
+        <div id="mapContainer">
+            <ui-gmap-google-map
+                 center='map.center'
+                 options='map.options'
+                 zoom='map.zoom'>
+                <ui-gmap-marker
+                    coords="map.position.coords"
+                    idkey="'map.position.id'"
+                    icon="map.position.icon"
+                    options="map.position.options">
+                </ui-gmap-marker>
+            </ui-gmap-google-map>
+        </div>
     </ion-content>
 </ion-view>

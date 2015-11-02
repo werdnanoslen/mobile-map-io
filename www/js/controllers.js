@@ -2,7 +2,6 @@ angular.module('controllers', [])
 
 .controller('MapCtrl', function($scope, $rootScope, $ionicLoading, uiGmapGoogleMapApi) {
     $scope.mapReady = false;
-    $scope.searchBarVisible = false;
     $scope.map = {
         center: {
             latitude: 0,
@@ -179,6 +178,16 @@ angular.module('controllers', [])
         $scope.overrideInfoWindowClick();
     });
 
+    $scope.centerMap = function() {
+        console.log("Centering");
+        if (Object.keys($scope.search).length === 0) {
+            $scope.centerOnMe();
+        } else {
+            $scope.map.center.latitude = $scope.search.lat;
+            $scope.map.center.longitude = $scope.search.lng;
+        }
+    };
+
     $scope.centerOnMe = function() {
         console.log('Getting current location');
         $scope.loading = $ionicLoading.show({
@@ -210,16 +219,6 @@ angular.module('controllers', [])
         }, function(error) {
             alert('Unable to get location: ' + error.message);
         });
-    };
-
-    $scope.centerMap = function() {
-        console.log("Centering");
-        if (Object.keys($scope.search).length === 0) {
-            $scope.centerOnMe();
-        } else {
-            $scope.map.center.latitude = $scope.search.lat;
-            $scope.map.center.longitude = $scope.search.lng;
-        }
     };
 
     $scope.$on('g-places-autocomplete:select', function(event, place) {
@@ -256,6 +255,20 @@ angular.module('controllers', [])
     };
 })
 
-.controller('ReportCtrl', function($scope) {
-    console.log('ready');
+.controller('ReportCtrl', function($rootScope, $scope, uiGmapGoogleMapApi) {
+    $scope.map = {
+        center: {
+            latitude: 0,
+            longitude: 0
+        },
+        options: {
+            disableDefaultUI: true
+        },
+        zoom: 15
+    };
+    $scope.date = "2015/01/01";
+    $scope.time = "00:00"
+    $scope.number = "100"
+    $scope.sometext = "asdouiahspuhwrgp9uhwr098hw08h8haps978aysd90g87asgp9uahwre9h";
+    $scope.place = "M Street, 950 Marietta St, Atlanta, GA 30318";
 });
