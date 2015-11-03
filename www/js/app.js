@@ -28,9 +28,14 @@ angular.module('mobile-map-io', [
         templateUrl: 'templates/add.html',
         controller: 'AddCtrl'
     }).state('report', {
-        url: '/report',
+        url: '/report/:reportId',
         templateUrl: 'templates/report.html',
-        controller: 'ReportCtrl'
+        controller: 'ReportCtrl',
+        resolve: {
+            reportId: ['$stateParams', function ($stateParams) {
+                return $stateParams.reportId;
+            }]
+        }
     });
 
     $urlRouterProvider.otherwise('/map');
