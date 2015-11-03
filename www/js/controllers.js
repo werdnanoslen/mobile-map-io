@@ -4,13 +4,13 @@ angular.module('controllers', [])
                                 $rootScope,
                                 $ionicLoading,
                                 uiGmapGoogleMapApi,
-                                uiGmapIsReady) {
+                                uiGmapIsReady,
+                                API) {
     $scope.mapReady = false;
     $scope.reports = {
         'markers': []
     };
     $scope.map = {
-        bounds: {},
         center: {
             latitude: 0,
             longitude: 0
@@ -145,18 +145,17 @@ angular.module('controllers', [])
 
     $scope.updateReportsInBounds = function() {
         uiGmapIsReady.promise(1).then(function(maps) {
-            var bounds = maps[0].map.getBounds();
-            var sw = bounds.getSouthWest();
-            var ne = bounds.getNorthEast();
-            boundsObj = new google.maps.LatLngBounds(sw, ne);
-
             $scope.reports.markers = [];
-            $scope.reports.markers.push({
-                latitude: $scope.map.center.latitude,
-                longitude: $scope.map.center.longitude,
-                title: 'm0',
-                id: 0
-            });
+            var bounds = maps[0].map.getBounds();
+            var promise = API.getReportsInBounds(bounds);
+            promise.then(
+                function (payload) {
+                    $scope.reports.markers.push(payload);
+                },
+                function (errorPayload) {
+                    $log.error('failure getting reports', errorPayload);
+                }
+            );
         });
     };
 })
