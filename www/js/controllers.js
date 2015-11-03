@@ -1,11 +1,39 @@
 angular.module('controllers', [])
 
-.controller('MapCtrl', function($scope, $rootScope, $ionicLoading, uiGmapGoogleMapApi) {
+.controller('MapCtrl', function($scope,
+                                $rootScope,
+                                $ionicLoading,
+                                uiGmapGoogleMapApi,
+                                uiGmapIsReady) {
     $scope.mapReady = false;
+    $scope.reports = {
+        'markers': []
+    };
     $scope.map = {
+        bounds: {},
         center: {
             latitude: 0,
             longitude: 0
+        },
+        events: {
+            center_changed: function(map) {
+                var center = map.getCenter();
+                var centerCoords = {
+                    'Latitude': center.lat(),
+                    'Longitude': center.lng()
+                }
+                var positionCoords = $scope.map.position.coords;
+                if (centerCoords === positionCoords) {
+                    $scope.search.place = "My position";
+                } else {
+                    $scope.search.place = center.toUrlValue();
+                }
+                $scope.search.lat = center.lat();
+                $scope.search.lng = center.lng();
+            },
+            idle: function(map) {
+                $scope.updateReportsInBounds();
+            }
         },
         options: {
             disableDefaultUI: true
@@ -17,6 +45,7 @@ angular.module('controllers', [])
         $scope.mapReady = true;
         $scope.centerMap();
         $scope.overrideInfoWindowClick();
+        $scope.updateReportsInBounds(uiMap);
     });
 
     $scope.$on('$stateChangeSuccess', function(event,toState,toParams,fromState) {
@@ -28,7 +57,7 @@ angular.module('controllers', [])
                 $scope.centerMap();
             }
         }
-    })
+    });
 
     $scope.centerOnMe = function() {
         console.log('Getting current location');
@@ -57,6 +86,7 @@ angular.module('controllers', [])
                 }
             };
             $scope.centerMap();
+            $scope.updateReportsInBounds();
             $ionicLoading.hide();
         }, function(error) {
             alert('Unable to get location: ' + error.message);
@@ -70,6 +100,7 @@ angular.module('controllers', [])
         } else {
             $scope.map.center.latitude = $scope.search.lat;
             $scope.map.center.longitude = $scope.search.lng;
+            $scope.updateReportsInBounds();
         }
     };
 
@@ -110,6 +141,23 @@ angular.module('controllers', [])
             }
             set.apply(this, arguments);
         }
+    };
+
+    $scope.updateReportsInBounds = function() {
+        uiGmapIsReady.promise(1).then(function(maps) {
+            var bounds = maps[0].map.getBounds();
+            var sw = bounds.getSouthWest();
+            var ne = bounds.getNorthEast();
+            boundsObj = new google.maps.LatLngBounds(sw, ne);
+
+            $scope.reports.markers = [];
+            $scope.reports.markers.push({
+                latitude: $scope.map.center.latitude,
+                longitude: $scope.map.center.longitude,
+                title: 'm0',
+                id: 0
+            });
+        });
     };
 })
 

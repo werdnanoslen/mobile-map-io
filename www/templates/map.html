@@ -29,6 +29,7 @@
 
         <ui-gmap-google-map
             center='map.center'
+            bounds='map.bounds'
             control='map.control'
             events='map.events'
             options='map.options'
@@ -45,10 +46,10 @@
                 idkey="'map.search.id'"
                 options="map.search.options">
             </ui-gmap-marker>
-            <!-- <ui-gmap-markers
+            <ui-gmap-markers
                  models="reports.markers"
-                 coords="self">
-            </ui-gmap-markers> -->
+                 coords="'self'">
+            </ui-gmap-markers>
         </ui-gmap-google-map>
     </ion-content>
 </ion-view>
