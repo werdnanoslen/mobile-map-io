@@ -7,6 +7,7 @@ angular.module('controllers', [])
                                 uiGmapIsReady,
                                 API) {
     $scope.mapReady = false;
+    $scope.search = {};
     $scope.reports = {
         'markers': []
     };
@@ -47,6 +48,15 @@ angular.module('controllers', [])
         $scope.overrideInfoWindowClick();
         $scope.updateReportsInBounds(uiMap);
     });
+
+    $scope.markersEvents = {
+        click: function(gMarker, eventName, model) {
+            if (model.$id) {
+                model = model.coords; //use scope portion then
+            }
+            alert("Model: event:" + eventName + " " + JSON.stringify(model));
+        }
+    };
 
     $scope.$on('$stateChangeSuccess', function(event,toState,toParams,fromState) {
         // "" for name indicates that it's the initial transition.
@@ -145,7 +155,6 @@ angular.module('controllers', [])
 
     $scope.updateReportsInBounds = function() {
         uiGmapIsReady.promise(1).then(function(maps) {
-            $scope.reports.markers = [];
             var bounds = maps[0].map.getBounds();
             var promise = API.getReportsInBounds(bounds);
             promise.then(
@@ -160,8 +169,12 @@ angular.module('controllers', [])
     };
 })
 
-.controller('ListCtrl', function($scope, $rootScope, $ionicLoading) {
+.controller('ListCtrl', function($scope, $rootScope, $ionicLoading, API) {
     console.log('ready');
+
+    $scope.reports = {
+        'markers': []
+    };
 
     $scope.$on('g-places-autocomplete:select', function(event, place) {
         $scope.loading = $ionicLoading.show({
@@ -171,8 +184,46 @@ angular.module('controllers', [])
         $scope.search.place = place.name + ", " + place.formatted_address;
         $scope.search.lat = place.geometry.location.lat();
         $scope.search.lng = place.geometry.location.lng();
+        $scope.updateReportsInBounds();
         $ionicLoading.hide();
     });
+
+    $scope.centerOnMe = function() {
+        console.log('Getting current location');
+        $scope.loading = $ionicLoading.show({
+            content: 'Getting current location...',
+            showBackdrop: false
+        });
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            console.log('Got pos', pos);
+            $scope.search.place = "My location";
+            $scope.search.lat = pos.coords.latitude;
+            $scope.search.lng = pos.coords.longitude;
+            $scope.updateReportsInBounds();
+            $ionicLoading.hide();
+        }, function(error) {
+            alert('Unable to get location: ' + error.message);
+        });
+    };
+
+    $scope.updateReportsInBounds = function() {
+        var promise = API.getReportsInBounds();
+        promise.then(
+            function (payload) {
+                $scope.reports.markers.push(payload);
+            },
+            function (errorPayload) {
+                $log.error('failure getting reports', errorPayload);
+            }
+        );
+    };
+
+    console.log("Centering");
+    if (Object.keys($scope.search).length === 0) {
+        $scope.centerOnMe();
+    } else {
+        $scope.updateReportsInBounds();
+    }
 })
 
 .controller('AddCtrl', function($scope, $rootScope, $ionicLoading, uiGmapGoogleMapApi) {

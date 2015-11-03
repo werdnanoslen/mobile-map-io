@@ -26,10 +26,12 @@
                         ng-click="centerOnMe()">
                 </button>
             </div>
-            <a class="item" ui-sref='report'>
-                Slim shady
+            <a  class="item"
+                ng-repeat="marker in reports.markers"
+                ui-sref="report({reportId: marker.id})">
+                {{marker.title}}
                 <span class="item-note">
-                    12 km
+                    {{marker.latitude}}
                 </span>
             </a>
         </div>
