@@ -1,11 +1,7 @@
 angular.module('controllers', [])
 
-.controller('MapCtrl', function($scope,
-                                $rootScope,
-                                $ionicLoading,
-                                uiGmapGoogleMapApi,
-                                uiGmapIsReady,
-                                API) {
+.controller('MapCtrl', function($scope, $rootScope, $ionicLoading, $state,
+        uiGmapGoogleMapApi, uiGmapIsReady, API) {
     $scope.mapReady = false;
     $scope.search = {};
     $scope.reports = {
@@ -25,7 +21,7 @@ angular.module('controllers', [])
                 }
                 var positionCoords = $scope.map.position.coords;
                 if (centerCoords === positionCoords) {
-                    $scope.search.place = "My position";
+                    $scope.search.place = 'My position';
                 } else {
                     $scope.search.place = center.toUrlValue();
                 }
@@ -51,10 +47,7 @@ angular.module('controllers', [])
 
     $scope.markersEvents = {
         click: function(gMarker, eventName, model) {
-            if (model.$id) {
-                model = model.coords; //use scope portion then
-            }
-            alert("Model: event:" + eventName + " " + JSON.stringify(model));
+            $state.go('report', {reportId: model.id});
         }
     };
 
@@ -62,7 +55,7 @@ angular.module('controllers', [])
         // "" for name indicates that it's the initial transition.
         // Not ideal, but that's how Angular works atm :/
         // https://github.com/angular-ui/ui-router/issues/1307#issuecomment-59570535
-        if ("" !== fromState.name && "map" === toState.name) {
+        if ('' !== fromState.name && 'map' === toState.name) {
             if ($scope.mapReady) {
                 $scope.centerMap();
             }
@@ -77,7 +70,7 @@ angular.module('controllers', [])
         });
         navigator.geolocation.getCurrentPosition(function(pos) {
             console.log('Got pos', pos);
-            $scope.search.place = "My location";
+            $scope.search.place = 'My location';
             $scope.search.lat = pos.coords.latitude;
             $scope.search.lng = pos.coords.longitude;
             $scope.map.position = {
@@ -104,7 +97,7 @@ angular.module('controllers', [])
     };
 
     $scope.centerMap = function() {
-        console.log("Centering");
+        console.log('Centering');
         if (Object.keys($scope.search).length === 0) {
             $scope.centerOnMe();
         } else {
@@ -196,7 +189,7 @@ angular.module('controllers', [])
         });
         navigator.geolocation.getCurrentPosition(function(pos) {
             console.log('Got pos', pos);
-            $scope.search.place = "My location";
+            $scope.search.place = 'My location';
             $scope.search.lat = pos.coords.latitude;
             $scope.search.lng = pos.coords.longitude;
             $scope.updateReportsInBounds();
@@ -218,7 +211,7 @@ angular.module('controllers', [])
         );
     };
 
-    console.log("Centering");
+    console.log('Centering');
     if (Object.keys($scope.search).length === 0) {
         $scope.centerOnMe();
     } else {
@@ -226,7 +219,8 @@ angular.module('controllers', [])
     }
 })
 
-.controller('AddCtrl', function($scope, $rootScope, $ionicLoading, uiGmapGoogleMapApi) {
+.controller('AddCtrl', function($scope, $rootScope, $ionicLoading,
+        uiGmapGoogleMapApi) {
     var geocoder = new google.maps.Geocoder();
     // hacked because gmap's events don't include infowindow clicks
     $scope.centerSetByPlaceClick = false;
@@ -246,7 +240,7 @@ angular.module('controllers', [])
                     geocoder.geocode({'location': latlng}, function(results, status) {
                         var topResult = results[0];
                         if (google.maps.GeocoderStatus.OK === status) {
-                            if ("ROOFTOP" === topResult.geometry.location_type) {
+                            if ('ROOFTOP' === topResult.geometry.location_type) {
                                 $scope.search.place = topResult.formatted_address;
                             } else {
                                 console.log('No exact address for this location: ', latlng);
@@ -277,7 +271,7 @@ angular.module('controllers', [])
     });
 
     $scope.centerMap = function() {
-        console.log("Centering");
+        console.log('Centering');
         if (Object.keys($scope.search).length === 0) {
             $scope.centerOnMe();
         } else {
@@ -294,7 +288,7 @@ angular.module('controllers', [])
         });
         navigator.geolocation.getCurrentPosition(function(pos) {
             console.log('Got pos', pos);
-            $scope.search.place = "My location";
+            $scope.search.place = 'My location';
             $scope.search.lat = pos.coords.latitude;
             $scope.search.lng = pos.coords.longitude;
             $scope.map.position = {
@@ -364,9 +358,9 @@ angular.module('controllers', [])
         },
         zoom: 15
     };
-    $scope.date = "2015/01/01";
-    $scope.time = "00:00"
-    $scope.number = "100"
-    $scope.sometext = "asdouiahspuhwrgp9uhwr098hw08h8haps978aysd90g87asgp9uahwre9h";
-    $scope.place = "M Street, 950 Marietta St, Atlanta, GA 30318";
+    $scope.date = '2015/01/01';
+    $scope.time = '00:00'
+    $scope.number = '100'
+    $scope.sometext = 'Some text';
+    $scope.place = 'Atlanta, GA 30318';
 });

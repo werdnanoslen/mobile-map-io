@@ -2,9 +2,25 @@
 root = true
 
 [*]
+charset = utf-8
+
+# Unix-style newlines with a newline ending every file
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 4 space indentation
 indent_style = space
 indent_size = 4
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
+continuation_indent_size = 8
+indent_brace_style = K&R
+
+# Punctuation styles
+curly_bracket_next_line = false
+spaces_around_operators = false
+spaces_around_brackets = outside
+quote_type = single
+
+# Punctuations styles for files that often mix quote type
+[*.{html,php}]
+quote_type = double

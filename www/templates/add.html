@@ -1,7 +1,9 @@
 <ion-view view-title="New report">
     <ion-nav-bar align-title="center" class="bar-positive">
         <ion-nav-buttons side="left">
-            <button class="button button-icon icon ion-android-close" ui-sref="map"></button>
+            <button class="button button-icon icon ion-android-close"
+                    ui-sref="map">
+            </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
             <button class="button button-clear">Submit</button>
@@ -12,22 +14,23 @@
             <form class="list" id="addForm">
                 <label class="item item-input">
                     <i class="icon ion-android-time"></i>
-                    <input type="date" name="date" ng-model="date">
-                    <input type="time" step="60" name="time" ng-model="time">
+                    <input type="date" name="date" ng-model="date" />
+                    <input type="time" step="60" name="time" ng-model="time" />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-social-bitcoin"></i>
-                    <input type="number" name="number" ng-model="number">
+                    <input type="number" name="number" ng-model="number" />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-android-textsms"></i>
-                    <input type="text" name="text" ng-model="text">
+                    <input type="text" name="text" ng-model="text" />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-location"></i>
                     <input  type="search"
                             g-places-autocomplete
-                            ng-model="search.place">
+                            ng-model="search.place"
+                    />
                     <button class="button button-small button-icon icon ion-pinpoint"
                             ng-click="centerOnMe()">
                     </button>
@@ -38,11 +41,11 @@
         <div id="mapContainer">
             <div id="centerMarker"></div>
             <ui-gmap-google-map
-                 center='map.center'
-                 control='map.control'
-                 events='map.events'
-                 options='map.options'
-                 zoom='map.zoom'>
+                 center="map.center"
+                 control="map.control"
+                 events="map.events"
+                 options="map.options"
+                 zoom="map.zoom">
                 <ui-gmap-marker
                     coords="map.position.coords"
                     idkey="'map.position.id'"
