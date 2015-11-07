@@ -35,8 +35,12 @@ map {
 }
 #addForm input,
 #reportDetails span {
-    padding-left: 1em;
     overflow: auto;
+    padding-left: 1em;
+    width: 100%;
+}
+#addForm search-field {
+    width: 100%;
 }
 #mainContainer {
     height: 100%;

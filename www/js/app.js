@@ -5,7 +5,8 @@ angular.module('mobile-map-io', [
     'uiGmapgoogle-maps',
     'google.places',
     'controllers',
-    'services'
+    'services',
+    'directives'
 ])
 
 .run(function($ionicPlatform, $rootScope) {
