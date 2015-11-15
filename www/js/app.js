@@ -9,12 +9,6 @@ angular.module('mobile-map-io', [
     'directives'
 ])
 
-.run(function($ionicPlatform, $rootScope) {
-    $ionicPlatform.ready(function() {
-        $rootScope.search = {};
-    });
-})
-
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     $stateProvider.state('map', {
         url: '/map',
@@ -40,4 +34,10 @@ angular.module('mobile-map-io', [
     });
 
     $urlRouterProvider.otherwise('/map');
+})
+
+.run(function($ionicPlatform, $rootScope) {
+    $ionicPlatform.ready(function() {
+        $rootScope.search = {};
+    });
 });
