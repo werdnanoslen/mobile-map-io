@@ -219,9 +219,8 @@ angular.module('controllers', [])
     }
 })
 
-.controller('AddCtrl', function($scope, $rootScope, $ionicLoading,
-        uiGmapGoogleMapApi) {
-    var geocoder = new google.maps.Geocoder();
+.controller('AddCtrl', function($scope, $rootScope, API, uiGmapGoogleMapApi,
+        $ionicLoading) {
     // hacked because gmap's events don't include infowindow clicks
     $scope.centerSetByPlaceClick = false;
 
@@ -236,24 +235,18 @@ angular.module('controllers', [])
                 if ($scope.centerSetByPlaceClick) {
                     $scope.centerSetByPlaceClick = false;
                 } else {
-                    var latlng = map.getCenter();
-                    geocoder.geocode({'location': latlng}, function(results, status) {
-                        var topResult = results[0];
-                        if (google.maps.GeocoderStatus.OK === status) {
-                            if ('ROOFTOP' === topResult.geometry.location_type) {
-                                $scope.search.place = topResult.formatted_address;
-                            } else {
-                                console.log('No exact address for this location: ', latlng);
-                                $scope.search.place = latlng.toUrlValue();
-                            }
-                        } else {
-                            console.error('geocode error: ', status);
-                            $scope.search.place = latlng.toUrlValue();
-                        }
-                        $scope.search.lat = latlng.lat;
-                        $scope.search.lng = latlng.lng;
+                    var centerLatLng = map.getCenter();
+                    $scope.loading = $ionicLoading.show({
+                        content: 'Getting location...',
+                        showBackdrop: false
+                    });
+                    API.geocodeLatLng(centerLatLng, function(payload) {
+                        $scope.search.lat = centerLatLng.lat();
+                        $scope.search.lng = centerLatLng.lng();
+                        $scope.search.place = payload;
                         //TODO: handle scope updates to async model better than this
                         $scope.$apply();
+                        $ionicLoading.hide();
                     });
                 }
             }
