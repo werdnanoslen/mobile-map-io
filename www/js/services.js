@@ -1,9 +1,24 @@
 angular.module('services', [])
 
-.factory('API', function ($q) {
+.factory('API', function ($q, $http) {
     var deferred = $q.defer();
+    var api = 'http://andyhub.com/demos/mobile-map-io/api/';
 
     return {
+        getReports: function () {
+            return $http.get(api + 'reports');
+        },
+        getReport: function (id) {
+            return $http.get(api + 'reports/' + id);
+        },
+        addReport: function (reportJson) {
+            return $http({
+                url: api + 'reports',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                data: {"reportJson": reportJson}
+            });
+        },
         getReportsInBounds: function (bounds) {
             if (undefined === bounds) {
                 var neLat = 0;
