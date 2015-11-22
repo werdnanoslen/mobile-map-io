@@ -4,26 +4,6 @@ angular.module('services', [])
     var deferred = $q.defer();
 
     return {
-        geocodeLatLng: function(latlng, callback) {
-            console.log('Getting location');
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({'location': latlng}, function(results, status) {
-                var topResult = results[0];
-                var place;
-                if (google.maps.GeocoderStatus.OK === status) {
-                    if ('ROOFTOP' === topResult.geometry.location_type) {
-                        place = topResult.formatted_address;
-                    } else {
-                        place = latlng.toUrlValue();
-                        console.log('No exact address for this location: ', place);
-                    }
-                } else {
-                    console.error('geocode error: ', status);
-                    place = latlng.toUrlValue();
-                }
-                callback(place);
-            });
-        },
         getReportsInBounds: function (bounds) {
             if (undefined === bounds) {
                 var neLat = 0;
