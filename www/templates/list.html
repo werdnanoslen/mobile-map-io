@@ -16,7 +16,16 @@
         <div class="list">
             <div class="item item-divider flex" id="searchBar">
                 Reports near
-                <search-field class="flex-item"></search-field>
+                <!-- <search-field class="flex-item"></search-field> -->
+                <input
+                    class="flex-item"
+                    type="search"
+                    g-places-autocomplete
+                    ng-model="search.place"
+                />
+                <button class="button button-small button-icon icon ion-pinpoint"
+                        ng-click="centerOnMe()">
+                </button>
             </div>
             <a  class="item"
                 ng-repeat="marker in reports.markers"

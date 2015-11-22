@@ -1,6 +1,6 @@
 angular.module('directives', [])
 
-.directive('searchField', function($rootScope, $ionicLoading) {
+.directive('searchField', function() {
     var TEMPLATE = [
         '<input type="search" ',
             'g-places-autocomplete ',
@@ -23,9 +23,9 @@ angular.module('directives', [])
                 });
                 navigator.geolocation.getCurrentPosition(function(pos) {
                     console.log('Got pos', pos);
-                    $rootScope.search.place = 'My location';
-                    $rootScope.search.lat = pos.coords.latitude;
-                    $rootScope.search.lng = pos.coords.longitude;
+                    $scope.search.place = 'My location';
+                    $scope.search.lat = pos.coords.latitude;
+                    $scope.search.lng = pos.coords.longitude;
                     $ionicLoading.hide();
                 }, function(error) {
                     alert('Unable to get location: ' + error.message);

@@ -15,10 +15,20 @@
     <ion-content scroll="false">
         <div class="item item-divider flex" id="searchBar">
             Reports near
-            <search-field
+            <!-- <search-field
                 class="flex-item"
                 ng-show="mapReady">
-            </search-field>
+            </search-field> -->
+            <input  class="flex-item"
+                    type="search"
+                    g-places-autocomplete
+                    ng-model="search.place"
+                    ng-show="mapReady"
+            />
+            <button class="button button-small button-icon icon ion-pinpoint"
+                    ng-click="centerOnMe()"
+                    ng-show="mapReady">
+            </button>
         </div>
 
         <ui-gmap-google-map
