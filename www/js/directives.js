@@ -36,5 +36,5 @@ angular.module('directives', [])
             gPlacesAutocomplete: '='
         },
         template: TEMPLATE.join('')
-    }
+    };
 });
