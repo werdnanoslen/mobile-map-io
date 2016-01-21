@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2016 at 04:49 PM
+-- Generation Time: Jan 22, 2016 at 12:18 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `reports` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `datetime_reported` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `datetime_reported` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `datetime_occurred` datetime NOT NULL,
   `number` int(11) NOT NULL,
   `text` varchar(255) NOT NULL,
