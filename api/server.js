@@ -1,44 +1,53 @@
-// BASE SETUP
-// =============================================================================
+var express = require("express");
+var mysql   = require("mysql");
+var bodyParser  = require("body-parser");
+var rest = require("./REST.js");
+var app  = express();
+var secrets = require("./secrets.js");
 
-// call the packages we need
-var express    = require('express');        // call express
-var app        = express();                 // define our app using express
-var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
-var model     = require('./model.js');
-mongoose.connect('mongodb://localhost/mobile-map-io'); // connect to our database
+function REST(){
+    var self = this;
+    self.connectMysql();
+};
 
-// configure app to use bodyParser()
-// this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+REST.prototype.connectMysql = function() {
+    var self = this;
+    var pool      =    mysql.createPool({
+        connectionLimit : 100,
+        host     : secrets.HOSTNAME,
+        user     : secrets.USERNAME,
+        password : secrets.PASSWORD,
+        database : secrets.DATABASE,
+        debug    : false
+    });
+    pool.getConnection(function(err,connection){
+        if(err) {
+          self.stop(err);
+        } else {
+          self.configureExpress(connection);
+        }
+    });
+}
 
-var port = process.env.PORT || 8080;        // set our port
+REST.prototype.configureExpress = function(connection) {
+      var self = this;
+      app.use(bodyParser.urlencoded({ extended: true }));
+      app.use(bodyParser.json());
+      var router = express.Router();
+      app.use('/api', router);
+      var rest_router = new rest(router,connection);
+      self.startServer();
+}
 
-// ROUTES FOR OUR API
-// =============================================================================
-var router = express.Router();              // get an instance of the express Router
+REST.prototype.startServer = function() {
+      app.listen(3000,function(){
+          console.log("mobile-map-io API running at 3000.");
+      });
+}
 
-// middleware to use for all requests
-router.use(function(req, res, next) {
-    // do logging
-    console.log('Something is happening.');
-    next(); // make sure we go to the next routes and don't stop here
-});
+REST.prototype.stop = function(err) {
+    console.log("ISSUE WITH MYSQL n" + err);
+    process.exit(1);
+}
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });
-});
-
-// more routes for our API will happen here
-
-// REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-app.use('/api', router);
-
-// START THE SERVER
-// =============================================================================
-app.listen(port);
-console.log('Magic happens on port ' + port);
+new REST();

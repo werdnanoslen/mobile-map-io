@@ -19,6 +19,20 @@ angular.module('services', [])
                 data: {"reportJson": reportJson}
             });
         },
+        updateReport: function (id, reportJson) {
+            return $http({
+                url: api + 'reports/' + id,
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                data: {"reportJson": reportJson}
+            });
+        },
+        deleteReport: function (id) {
+            return $http({
+                url: api + 'reports/' + id,
+                method: 'DELETE'
+            });
+        },
         getReportsInBounds: function (bounds) {
             if (undefined === bounds) {
                 var neLat = 0;
