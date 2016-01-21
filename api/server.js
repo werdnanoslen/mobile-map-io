@@ -1,7 +1,7 @@
 var express = require("express");
 var mysql   = require("mysql");
 var bodyParser  = require("body-parser");
-var rest = require("./REST.js");
+var rest = require("./rest.js");
 var app  = express();
 var secrets = require("./secrets.js");
 
