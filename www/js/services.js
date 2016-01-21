@@ -34,16 +34,21 @@ angular.module('services', [])
             });
         },
         getReportsInBounds: function (bounds) {
+            var neLat;
+            var neLng;
+            var swLat;
+            var swLng;
+
             if (undefined === bounds) {
-                var neLat = 0;
-                var neLng = 0;
-                var swLat = 0;
-                var swLng = 0;
+                neLat = 0;
+                neLng = 0;
+                swLat = 0;
+                swLng = 0;
             } else {
-                var neLat = bounds.getNorthEast().lat();
-                var neLng = bounds.getNorthEast().lng();
-                var swLat = bounds.getSouthWest().lat();
-                var swLng = bounds.getSouthWest().lng();
+                neLat = bounds.getNorthEast().lat();
+                neLng = bounds.getNorthEast().lng();
+                swLat = bounds.getSouthWest().lat();
+                swLng = bounds.getSouthWest().lng();
             }
             var lat = (neLat + swLat) / 2;
             var lng = (neLng + swLng) / 2;

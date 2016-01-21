@@ -18,7 +18,7 @@ angular.module('controllers', [])
                 var centerCoords = {
                     'Latitude': center.lat(),
                     'Longitude': center.lng()
-                }
+                };
                 var positionCoords = $scope.map.position.coords;
                 if (centerCoords === positionCoords) {
                     $scope.search.place = 'My position';
@@ -143,7 +143,7 @@ angular.module('controllers', [])
                 }
             }
             set.apply(this, arguments);
-        }
+        };
     };
 
     $scope.updateReportsInBounds = function() {
@@ -343,7 +343,7 @@ angular.module('controllers', [])
                 }
             }
             set.apply(this, arguments);
-        }
+        };
     };
 })
 
@@ -359,8 +359,8 @@ angular.module('controllers', [])
         zoom: 15
     };
     $scope.date = '2015/01/01';
-    $scope.time = '00:00'
-    $scope.number = '100'
+    $scope.time = '00:00';
+    $scope.number = '100';
     $scope.sometext = 'Some text';
     $scope.place = 'Atlanta, GA 30318';
 });
