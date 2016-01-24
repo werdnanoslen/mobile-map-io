@@ -34,14 +34,14 @@ REST.prototype.configureExpress = function(connection) {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
       var router = express.Router();
-      app.use('/api', router);
+      app.use(secrets.APIPATH, router);
       var rest_router = new rest(router,connection);
       self.startServer();
 }
 
 REST.prototype.startServer = function() {
-      app.listen(3000,function(){
-          console.log("mobile-map-io API running at 3000.");
+      app.listen(secrets.PORT, function(){
+          console.log("mobile-map-io API running at port " + secrets.PORT);
       });
 }
 
