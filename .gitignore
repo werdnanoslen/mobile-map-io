@@ -6,3 +6,4 @@ platforms/
 plugins/
 www/lib/
 api/secrets.js
+deployment-config.json
