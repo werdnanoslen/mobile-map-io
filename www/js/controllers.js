@@ -219,12 +219,12 @@ angular.module('controllers', [])
     }
 })
 
-.controller('AddCtrl', function($scope, $rootScope, $ionicLoading,
-        uiGmapGoogleMapApi) {
+.controller('AddCtrl', function($scope, $rootScope, $ionicLoading, $log,
+        $state, uiGmapGoogleMapApi, API) {
     var geocoder = new google.maps.Geocoder();
     // hacked because gmap's events don't include infowindow clicks
     $scope.centerSetByPlaceClick = false;
-
+    $scope.form = {};
     $scope.mapReady = false;
     $scope.map = {
         center: {
@@ -252,6 +252,7 @@ angular.module('controllers', [])
                         }
                         $scope.search.lat = latlng.lat;
                         $scope.search.lng = latlng.lng;
+                        $scope.form.place = $scope.search.place;
                         //TODO: handle scope updates to async model better than this
                         $scope.$apply();
                     });
@@ -311,6 +312,28 @@ angular.module('controllers', [])
         }, function(error) {
             alert('Unable to get location: ' + error.message);
         });
+    };
+
+    $scope.submitForm = function() {
+        //TODO validation
+
+        /*
+         HTML doesn't provide a nice combined datetime picker, so this
+         combines the two fields into one MySQL-ready timestamp object
+        */
+        $scope.form.date.setHours($scope.form.time.getHours());
+        $scope.form.date.setMinutes($scope.form.time.getMinutes());
+        $scope.form.datetime = $scope.form.date.toISOString().slice(0, 19).replace('T', ' ');
+
+        var promise = API.addReport($scope.form);
+        promise.then(
+            function (payload) {
+                $state.go('report', {reportId: payload.rows[0].id});
+            },
+            function (errorPayload) {
+                $log.error('failure posting report', errorPayload);
+            }
+        );
     };
 
     $scope.$on('g-places-autocomplete:select', function(event, place) {
