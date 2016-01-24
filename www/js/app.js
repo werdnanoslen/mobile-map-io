@@ -10,8 +10,8 @@ angular.module('mobile-map-io', [
 ])
 
 .run(function($ionicPlatform, $rootScope) {
+    $rootScope.search = {};
     $ionicPlatform.ready(function() {
-        $rootScope.search = {};
     });
 })
 
