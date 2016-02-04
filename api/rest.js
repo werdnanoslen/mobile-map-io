@@ -8,15 +8,17 @@ function REST_ROUTER(router, connection) {
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router, connection) {
+    app.options('/reports', cors());
+
     // Get API info
-    router.get(api, function(req, res) {
+    router.get("/", function(req, res) {
         res.json({
             "Message": "This is the mobile-map-io API"
         });
     });
 
     // Get all reports
-    router.get(api + "reports", function(req, res) {
+    router.get("/reports", function(req, res) {
         var query = "SELECT * FROM ??";
         var table = ["reports"];
         query = mysql.format(query, table);
@@ -37,7 +39,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
     });
 
     // Get report by id
-    router.get(api + "reports/:id", function(req, res) {
+    router.get("/reports/:id", function(req, res) {
         var query = "SELECT * FROM ?? WHERE ??=?";
         var table = ["reports", "id", req.params.id];
         query = mysql.format(query, table);
@@ -58,7 +60,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
     });
 
     // Add report
-    router.post(api + "reports", function(req, res) {
+    router.post("/reports", function(req, res) {
         var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
         var table = ["reports", "datetime_occurred", "number", "text", "place",
             req.body.date + " " + req.body.time, req.body.number, req.body.text, req.body.place
@@ -81,7 +83,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
     });
 
     // Update report
-    router.put(api + "reports", function(req, res) {
+    router.put("/reports", function(req, res) {
         var query = "UPDATE ?? SET ?? = ?, ?? = ?, ?? = ?, ?? = ? WHERE ?? = ?";
         var table = ["reports",
             "datetime_occurred", req.body.datetime,
@@ -108,7 +110,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
     });
 
     // Delete report by id
-    router.delete(api + "reports/:id", function(req, res) {
+    router.delete("/reports/:id", function(req, res) {
         var query = "DELETE from ?? WHERE ??=?";
         var table = ["reports", "id", req.params.id];
         query = mysql.format(query, table);

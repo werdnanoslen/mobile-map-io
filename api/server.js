@@ -1,6 +1,7 @@
 var express = require("express");
 var mysql   = require("mysql");
 var bodyParser  = require("body-parser");
+var cors = require("cors");
 var rest = require("./rest.js");
 var app  = express();
 var secrets = require("./secrets.js");
@@ -30,19 +31,20 @@ REST.prototype.connectMysql = function() {
 }
 
 REST.prototype.configureExpress = function(connection) {
-      var self = this;
-      app.use(bodyParser.urlencoded({ extended: true }));
-      app.use(bodyParser.json());
-      var router = express.Router();
-      app.use(secrets.APIPATH, router);
-      var rest_router = new rest(router,connection);
-      self.startServer();
+    var self = this;
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    var router = express.Router();
+    app.use(cors());
+    app.use(secrets.APIPATH, router);
+    var rest_router = new rest(router,connection);
+    self.startServer();
 }
 
 REST.prototype.startServer = function() {
-      app.listen(secrets.PORT, function(){
-          console.log("mobile-map-io API running at port " + secrets.PORT);
-      });
+    app.listen(secrets.PORT, function(){
+      console.log("mobile-map-io API running at port " + secrets.PORT);
+    });
 }
 
 REST.prototype.stop = function(err) {

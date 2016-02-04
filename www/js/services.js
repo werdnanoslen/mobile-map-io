@@ -2,7 +2,7 @@ angular.module('services', [])
 
 .factory('API', function ($q, $http) {
     var deferred = $q.defer();
-    var api = '//localhost:8080/mobile-map-io/api/';
+    var api = '//45.55.80.26:8080/demos/mobile-map-io/api/';
 
     return {
         getReports: function () {
