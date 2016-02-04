@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.14
+-- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Jan 22, 2016 at 12:18 AM
--- Server version: 5.6.17
--- PHP Version: 5.5.12
+-- Host: localhost
+-- Generation Time: Feb 04, 2016 at 01:21 PM
+-- Server version: 5.5.47-0ubuntu0.14.04.1
+-- PHP Version: 5.5.9-1ubuntu4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `reports` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
   `datetime_reported` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `datetime_occurred` datetime NOT NULL,
-  `number` int(11) NOT NULL,
-  `text` varchar(255) NOT NULL,
-  `place` varchar(255) NOT NULL,
+  `datetime_occurred` datetime DEFAULT NULL,
+  `number` int(11) DEFAULT NULL,
+  `text` varchar(255) DEFAULT NULL,
+  `place` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
