@@ -8,8 +8,6 @@ function REST_ROUTER(router, connection) {
 }
 
 REST_ROUTER.prototype.handleRoutes = function(router, connection) {
-    app.options('/reports', cors());
-
     // Get API info
     router.get("/", function(req, res) {
         res.json({
