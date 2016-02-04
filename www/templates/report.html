@@ -12,19 +12,20 @@
             <form class="list" id="reportDetails">
                 <label class="item item-input">
                     <i class="icon ion-android-time"></i>
-                    <span>{{date}}, {{time}}</span>
+                    <input type="date" name="date" ng-model="form.date" disabled />
+                    <input type="time" step="60" name="time" ng-model="form.time" disabled />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-social-bitcoin"></i>
-                    <span>{{number}}</span>
+                    <input type="number" name="number" ng-model="form.number" disabled />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-android-textsms"></i>
-                    <span>{{text}}</span>
+                    <input type="text" name="text" ng-model="form.text" disabled />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-location"></i>
-                    <span>{{place}}</span>
+                    <span>{{form.place}}</span>
                 </label>
             </form>
         </div>

@@ -333,7 +333,7 @@ angular.module('controllers', [])
         var promise = API.addReport($scope.form);
         promise.then(
             function (payload) {
-                $state.go('report', {reportId: payload.rows[0].id});
+                $state.go('report', {reportId: payload.data.report.insertId});
             },
             function (errorPayload) {
                 $log.error('failure posting report', errorPayload);
@@ -375,7 +375,7 @@ angular.module('controllers', [])
     };
 })
 
-.controller('ReportCtrl', function($rootScope, $scope, uiGmapGoogleMapApi) {
+.controller('ReportCtrl', function($rootScope, $scope, uiGmapGoogleMapApi, $state, API) {
     $scope.map = {
         center: {
             latitude: 0,
@@ -386,9 +386,16 @@ angular.module('controllers', [])
         },
         zoom: 15
     };
-    $scope.date = '2015/01/01';
-    $scope.time = '00:00';
-    $scope.number = '100';
-    $scope.sometext = 'Some text';
-    $scope.place = 'Atlanta, GA 30318';
+    var promise = API.getReport($state.params.reportId);
+    promise.then(
+        function (payload) {
+            $scope.form = payload.data.report[0];
+            var datetime = new Date(payload.data.report[0].datetime_occurred);
+            console.log(datetime);
+            $scope.form.date = $scope.form.time = datetime;
+        },
+        function (errorPayload) {
+            $log.error('failure fetching report', errorPayload);
+        }
+    );
 });
