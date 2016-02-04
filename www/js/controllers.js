@@ -281,6 +281,11 @@ angular.module('controllers', [])
         }
     };
 
+    var now = new Date();
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    $scope.form.date = $scope.form.time = now;
+
     $scope.centerOnMe = function() {
         console.log('Getting current location');
         $scope.loading = $ionicLoading.show({
