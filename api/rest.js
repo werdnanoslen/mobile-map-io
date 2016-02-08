@@ -59,14 +59,40 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         });
     });
 
+    // Get report by filter criteria
+    router.post("/reports/nearby", function(req, res) {
+        var query = "SELECT *, ROUND(SQRT(POW(((69.1/1.61) * (? - ??)), 2) + POW(((53/1.61) * (? - ??)), 2)), 1) "
+                + "AS distance FROM ?? HAVING distance < ? ORDER BY distance;";
+        var table = [
+            req.body.myLat.toString(), "lat",
+            req.body.myLng.toString(), "lng",
+            "reports", req.body.kmAway.toString()
+        ];
+        query = mysql.format(query, table);
+        connection.query(query, function(err, rows) {
+            if (rows.length < 1) {
+                res.status(404).json({
+                    "error": 'report does not exist with that criteria'
+                });
+            } else if (err) {
+                res.status(500).json({
+                    "error": err,
+                });
+            } else {
+                res.json({
+                    "reports": rows
+                });
+            }
+        });
+    });
+
     // Add report
     router.post("/reports", function(req, res) {
-        var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
+        var query = "INSERT INTO ??(??,??,??,??,??,??) VALUES (?,?,?,?,?,?)";
         var report = req.body.reportJson;
-        var table = ["reports", "datetime_occurred", "number", "text", "place",
-            report.datetime, report.number, report.text, report.place
+        var table = ["reports", "datetime_occurred", "number", "text", "place", "lat", "lng",
+            report.datetime, report.number, report.text, report.place, report.lat, report.lng
         ];
-        console.log(req.body);
         query = mysql.format(query, table);
         connection.query(query, function(err, rows) {
             if (err) {

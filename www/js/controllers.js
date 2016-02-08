@@ -1,6 +1,6 @@
 angular.module('controllers', [])
 
-.controller('MapCtrl', function($scope, $rootScope, $ionicLoading, $state,
+.controller('MapCtrl', function($scope, $rootScope, $ionicLoading, $state, $log,
         uiGmapGoogleMapApi, uiGmapIsReady, API) {
     $scope.mapReady = false;
     $scope.search = {};
@@ -149,10 +149,26 @@ angular.module('controllers', [])
     $scope.updateReportsInBounds = function() {
         uiGmapIsReady.promise(1).then(function(maps) {
             var bounds = maps[0].map.getBounds();
-            var promise = API.getReportsInBounds(bounds);
+            var ne = bounds.getNorthEast();
+            var sw = bounds.getSouthWest();
+            var distance = Math.sqrt(Math.pow(((69.1/1.61) * (ne.lat() - sw.lat())), 2) + Math.pow(((53/1.61) * (ne.lng() - sw.lng())), 2))/2;
+            $scope.reports.markers = [];
+            var promise = API.getReportsNearby($scope.search.lat, $scope.search.lng, distance);
             promise.then(
                 function (payload) {
-                    $scope.reports.markers.push(payload);
+                    var reports = payload.data.reports;
+                    for (var i=0; i<reports.length; ++i) {
+                        var report = reports[i];
+                        var distance = (0 == report.distance) ? '<0.1' : report.distance;
+                        var marker = {
+                            latitude: report.lat,
+                            longitude: report.lng,
+                            title: report.place,
+                            id: report.id,
+                            distance: distance
+                        };
+                        $scope.reports.markers.push(marker);
+                    }
                 },
                 function (errorPayload) {
                     $log.error('failure getting reports', errorPayload);
@@ -162,7 +178,7 @@ angular.module('controllers', [])
     };
 })
 
-.controller('ListCtrl', function($scope, $rootScope, $ionicLoading, API) {
+.controller('ListCtrl', function($scope, $rootScope, $ionicLoading, $log, API) {
     console.log('ready');
 
     $scope.reports = {
@@ -200,10 +216,24 @@ angular.module('controllers', [])
     };
 
     $scope.updateReportsInBounds = function() {
-        var promise = API.getReportsInBounds();
+        $scope.reports.markers = [];
+        var promise = API.getReportsNearby($scope.search.lat, $scope.search.lng, 10);
         promise.then(
             function (payload) {
-                $scope.reports.markers.push(payload);
+                console.log(payload);
+                var reports = payload.data.reports;
+                for (var i=0; i<reports.length; ++i) {
+                    var report = reports[i];
+                    var distance = (0 == report.distance) ? '<0.1' : report.distance;
+                    var marker = {
+                        latitude: report.lat,
+                        longitude: report.lng,
+                        title: report.place,
+                        id: report.id,
+                        distance: distance
+                    };
+                    $scope.reports.markers.push(marker);
+                }
             },
             function (errorPayload) {
                 $log.error('failure getting reports', errorPayload);
@@ -321,6 +351,7 @@ angular.module('controllers', [])
 
     $scope.submitForm = function() {
         //TODO validation
+        var reportJson = $scope.form;
 
         /*
          HTML doesn't provide a nice combined datetime picker, so this
@@ -328,9 +359,12 @@ angular.module('controllers', [])
         */
         $scope.form.date.setHours($scope.form.time.getHours());
         $scope.form.date.setMinutes($scope.form.time.getMinutes());
-        $scope.form.datetime = $scope.form.date.toISOString().slice(0, 19).replace('T', ' ');
+        reportJson.datetime = $scope.form.date.toISOString().slice(0, 19).replace('T', ' ');
 
-        var promise = API.addReport($scope.form);
+        reportJson.lat = $scope.map.center.latitude;
+        reportJson.lng = $scope.map.center.longitude;
+
+        var promise = API.addReport(reportJson);
         promise.then(
             function (payload) {
                 $state.go('report', {reportId: payload.data.report.insertId});
@@ -391,7 +425,6 @@ angular.module('controllers', [])
         function (payload) {
             $scope.form = payload.data.report[0];
             var datetime = new Date(payload.data.report[0].datetime_occurred);
-            console.log(datetime);
             $scope.form.date = $scope.form.time = datetime;
         },
         function (errorPayload) {

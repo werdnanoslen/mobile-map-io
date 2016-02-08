@@ -11,12 +11,20 @@ angular.module('services', [])
         getReport: function (id) {
             return $http.get(api + 'reports/' + id);
         },
+        getReportsNearby: function(myLat, myLng, kmAway) {
+            return $http({
+                url: api + 'reports/nearby',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                data: {'myLat': myLat, 'myLng': myLng, 'kmAway': kmAway}
+            });
+        },
         addReport: function (reportJson) {
             return $http({
                 url: api + 'reports',
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                data: {"reportJson": reportJson}
+                data: {'reportJson': reportJson}
             });
         },
         updateReport: function (id, reportJson) {
@@ -24,7 +32,7 @@ angular.module('services', [])
                 url: api + 'reports/' + id,
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                data: {"reportJson": reportJson}
+                data: {'reportJson': reportJson}
             });
         },
         deleteReport: function (id) {
@@ -32,35 +40,6 @@ angular.module('services', [])
                 url: api + 'reports/' + id,
                 method: 'DELETE'
             });
-        },
-        getReportsInBounds: function (bounds) {
-            var neLat;
-            var neLng;
-            var swLat;
-            var swLng;
-
-            if (undefined === bounds) {
-                neLat = 0;
-                neLng = 0;
-                swLat = 0;
-                swLng = 0;
-            } else {
-                neLat = bounds.getNorthEast().lat();
-                neLng = bounds.getNorthEast().lng();
-                swLat = bounds.getSouthWest().lat();
-                swLng = bounds.getSouthWest().lng();
-            }
-            var lat = (neLat + swLat) / 2;
-            var lng = (neLng + swLng) / 2;
-            var rand = Math.random()/100;
-            var report = {
-                latitude: lat + rand,
-                longitude: lng + rand,
-                title: rand.toString(),
-                id: Math.floor(rand*10000)
-            };
-            deferred.resolve(report);
-            return deferred.promise;
         }
     };
 });
