@@ -416,16 +416,21 @@ angular.module('controllers', [])
             longitude: 0
         },
         options: {
-            disableDefaultUI: true
+            disableDefaultUI: true,
+            disableDoubleClickZoom: true,
+            draggable: false
         },
         zoom: 15
     };
     var promise = API.getReport($state.params.reportId);
     promise.then(
         function (payload) {
-            $scope.form = payload.data.report[0];
-            var datetime = new Date(payload.data.report[0].datetime_occurred);
+            var report = payload.data.report[0];
+            $scope.form = report;
+            var datetime = new Date(report.datetime_occurred);
             $scope.form.date = $scope.form.time = datetime;
+            $scope.map.center.latitude = report.lat;
+            $scope.map.center.longitude = report.lng;
         },
         function (errorPayload) {
             $log.error('failure fetching report', errorPayload);
