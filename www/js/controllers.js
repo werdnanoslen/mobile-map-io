@@ -32,6 +32,11 @@ angular.module('controllers', [])
                 $scope.updateReportsInBounds();
             }
         },
+        markersEvents: {
+            click: function(gMarker, eventName, model) {
+                $state.go('report', {reportId: model.id});
+            }
+        },
         options: {
             disableDefaultUI: true
         },
@@ -44,12 +49,6 @@ angular.module('controllers', [])
         $scope.overrideInfoWindowClick();
         $scope.updateReportsInBounds(uiMap);
     });
-
-    $scope.markersEvents = {
-        click: function(gMarker, eventName, model) {
-            $state.go('report', {reportId: model.id});
-        }
-    };
 
     $scope.$on('$stateChangeSuccess', function(event,toState,toParams,fromState) {
         // "" for name indicates that it's the initial transition.
