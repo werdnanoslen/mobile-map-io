@@ -69,6 +69,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
             "reports", req.body.kmAway.toString()
         ];
         query = mysql.format(query, table);
+        connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({
                     "error": err
