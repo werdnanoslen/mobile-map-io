@@ -146,9 +146,9 @@ angular.module('controllers', [])
         google.maps.InfoWindow.prototype.set = function (key, val) {
             if (key === 'map') {
                 if (!this.get('noSupress')) {
-                    var place = this.content.childNodes[0].childNodes[1].innerText;
                     $scope.search.lat = this.position.lat();
                     $scope.search.lng = this.position.lng();
+                    var place = this.content.childNodes[0].childNodes[1].innerText.trim();
                     $scope.centerSetByPlaceClick = true;
                     $scope.centerMap();
                     $scope.search.place = place;
