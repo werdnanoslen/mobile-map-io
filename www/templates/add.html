@@ -16,16 +16,16 @@
             <form class="list" id="addForm" name="addForm">
                 <label class="item item-input">
                     <i class="icon ion-android-time"></i>
-                    <input type="date" name="date" ng-model="form.date" required />
-                    <input type="time" step="60" name="time" ng-model="form.time" required />
+                    <input type="date" name="date" ng-model="form.date" />
+                    <input type="time" step="60" name="time" ng-model="form.time" />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-social-bitcoin"></i>
-                    <input type="number" name="number" ng-model="form.number" required />
+                    <input type="number" name="number" ng-model="form.number" />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-android-textsms"></i>
-                    <input type="text" name="text" ng-model="form.text" required />
+                    <input type="text" name="text" ng-model="form.text" />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-location"></i>
@@ -34,10 +34,9 @@
                             g-places-autocomplete
                             ng-model="form.place"
                             name="place"
-                            required
                     />
                     <button class="button button-small button-icon icon ion-pinpoint"
-                            ng-click="centerOnMe()">
+                            ng-click="centerOnMePlease()">
                     </button>
                 </label>
             </form>

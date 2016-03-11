@@ -295,18 +295,17 @@ angular.module('controllers', [])
                         var topResult = results[0];
                         if (google.maps.GeocoderStatus.OK === status) {
                             if ('ROOFTOP' === topResult.geometry.location_type) {
-                                $scope.search.place = topResult.formatted_address;
+                                $scope.form.place = topResult.formatted_address;
                             } else {
                                 console.log('No exact address for this location: ', latlng);
-                                $scope.search.place = latlng.toUrlValue();
+                                $scope.form.place = latlng.toUrlValue();
                             }
                         } else {
                             console.error('geocode error: ', status);
-                            $scope.search.place = latlng.toUrlValue();
+                            $scope.form.place = latlng.toUrlValue();
                         }
-                        $scope.search.lat = latlng.lat;
-                        $scope.search.lng = latlng.lng;
-                        $scope.form.place = $scope.search.place;
+                        $scope.form.lat = latlng.lat;
+                        $scope.form.lng = latlng.lng;
                         //TODO: handle scope updates to async model better than this
                         $scope.$apply();
                     });
@@ -325,20 +324,20 @@ angular.module('controllers', [])
         $scope.overrideInfoWindowClick();
     });
 
+    var now = new Date();
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    $scope.form.date = $scope.form.time = now;
+
     $scope.centerMap = function() {
         console.log('Centering');
-        if (Object.keys($scope.search).length === 0) {
+        if (undefined === $scope.search || Object.keys($scope.search).length === 0) {
             $scope.centerOnMe();
         } else {
             $scope.map.center.latitude = $scope.search.lat;
             $scope.map.center.longitude = $scope.search.lng;
         }
     };
-
-    var now = new Date();
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-    $scope.form.date = $scope.form.time = now;
 
     $scope.centerOnMe = function() {
         console.log('Getting current location');
@@ -362,8 +361,8 @@ angular.module('controllers', [])
                     scale: 7
                 },
                 coords: {
-                    latitude: $scope.search.lat,
-                    longitude: $scope.search.lng
+                    latitude: $scope.form.lat,
+                    longitude: $scope.form.lng
                 }
             };
             $scope.centerMap();
@@ -416,14 +415,13 @@ angular.module('controllers', [])
         google.maps.InfoWindow.prototype.set = function (key, val) {
             if (key === 'map') {
                 if (!this.get('noSupress')) {
-                    var nodes = this.content.childNodes;
-                    var name = nodes[0].innerHTML;
-                    var address = nodes[1].childNodes[0].innerHTML;
-                    $scope.search.place = name + ", " + address;
                     $scope.search.lat = this.position.lat();
                     $scope.search.lng = this.position.lng();
+                    var place = this.content.childNodes[0].childNodes[1].innerText.trim();
                     $scope.centerSetByPlaceClick = true;
                     $scope.centerMap();
+                    $scope.search.place = place;
+                    $scope.form.place = place;
                     $scope.$apply();
                     return;
                 }
