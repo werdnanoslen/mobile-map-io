@@ -21,13 +21,13 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         var table = ["reports"];
         query = mysql.format(query, table);
         connection.query(query, function(err, rows) {
-            if (rows.length < 1) {
+            if (err) {
+               res.status(500).json({
+                   "error": err,
+               });
+            } else if (rows.length < 1) {
                 res.status(404).json({
                     "error": 'no reports'
-                });
-            } else if (err) {
-                res.status(500).json({
-                    "error": err,
                 });
             } else {
                 res.json({
@@ -43,13 +43,13 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         var table = ["reports", "id", req.params.id];
         query = mysql.format(query, table);
         connection.query(query, function(err, rows) {
+            if (err) {
+                res.status(500).json({
+                    "error": err,
+                });
             if (rows.length < 1) {
                 res.status(404).json({
                     "error": 'report does not exist'
-                });
-            } else if (err) {
-                res.status(500).json({
-                    "error": err,
                 });
             } else {
                 res.json({
@@ -70,13 +70,13 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         ];
         query = mysql.format(query, table);
         connection.query(query, function(err, rows) {
-            if (rows.length < 1) {
-                res.status(404).json({
-                    "error": 'report does not exist with that criteria'
-                });
-            } else if (err) {
+            if (err) {
                 res.status(500).json({
                     "error": err,
+                });
+            } elseif (rows.length < 1) {
+                res.status(404).json({
+                    "error": 'report does not exist with that criteria'
                 });
             } else {
                 res.json({

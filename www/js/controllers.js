@@ -146,6 +146,11 @@ angular.module('controllers', [])
     };
 
     $scope.updateReportsInBounds = function() {
+        var lat = $scope.search.lat;
+        var lng = $scope.search.lng;
+        if (undefined === lat | undefined === lng) {
+            return;
+        }
         uiGmapIsReady.promise(1).then(function(maps) {
             var bounds = maps[0].map.getBounds();
             var ne = bounds.getNorthEast();
@@ -215,6 +220,11 @@ angular.module('controllers', [])
     };
 
     $scope.updateReportsInBounds = function() {
+        var lat = $scope.search.lat;
+        var lng = $scope.search.lng;
+        if (undefined === lat | undefined === lng) {
+            return;
+        }
         $scope.reports.markers = [];
         var promise = API.getReportsNearby($scope.search.lat, $scope.search.lng, 10);
         promise.then(
