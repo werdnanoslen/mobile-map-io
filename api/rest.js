@@ -23,7 +23,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         connection.query(query, function(err, rows) {
             if (err) {
                res.status(500).json({
-                   "error": err,
+                   "error": err
                });
             } else if (rows.length < 1) {
                 res.status(404).json({
@@ -45,9 +45,9 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({
-                    "error": err,
+                    "error": err
                 });
-            if (rows.length < 1) {
+            } else if (rows.length < 1) {
                 res.status(404).json({
                     "error": 'report does not exist'
                 });
@@ -69,12 +69,11 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
             "reports", req.body.kmAway.toString()
         ];
         query = mysql.format(query, table);
-        connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({
-                    "error": err,
+                    "error": err
                 });
-            } elseif (rows.length < 1) {
+            } else if (rows.length < 1) {
                 res.status(404).json({
                     "error": 'report does not exist with that criteria'
                 });
@@ -97,7 +96,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({
-                    "error": err,
+                    "error": err
                 });
             } else {
                 res.json({
@@ -122,7 +121,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({
-                    "error": err,
+                    "error": err
                 });
             } else {
                 res.json({
@@ -140,7 +139,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({
-                    "error": err,
+                    "error": err
                 });
             } else {
                 res.json({
