@@ -27,7 +27,7 @@
                     <i class="icon ion-android-textsms"></i>
                     <input type="text" name="text" ng-model="form.text" />
                 </label>
-                <label class="item item-input">
+                <div class="item item-input">
                     <i class="icon ion-location"></i>
                     <!-- <search-field></search-field> -->
                     <input  type="search"
@@ -36,9 +36,10 @@
                             name="place"
                     />
                     <button class="button button-small button-icon icon ion-pinpoint"
-                            ng-click="centerOnMePlease()">
+                            ng-click="centerOnMe()"
+                            ng-show="mapReady">
                     </button>
-                </label>
+                </div>
             </form>
         </div>
 
