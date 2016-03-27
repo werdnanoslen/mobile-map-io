@@ -11,6 +11,14 @@ angular.module('services', [])
         getReport: function (id) {
             return $http.get(api + 'reports/' + id);
         },
+        getReports: function(filters) {
+            return $http({
+                url: api + 'reports/filter',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                data: {filters}
+            });
+        },
         getReportsNearby: function(myLat, myLng, kmAway) {
             return $http({
                 url: api + 'reports/nearby',
