@@ -34,6 +34,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                     "reports": rows
                 });
             }
+            connection.release();
         });
     });
 
@@ -56,6 +57,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                     "report": rows
                 });
             }
+            connection.release();
         });
     });
 
@@ -83,6 +85,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                     "reports": rows
                 });
             }
+            connection.release();
         });
     });
 
@@ -104,6 +107,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                     "report": rows
                 });
             }
+            connection.release();
         });
     });
 
@@ -129,6 +133,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                     "report": rows
                 });
             }
+            connection.release();
         });
     });
 
@@ -147,6 +152,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                     "report": rows
                 });
             }
+            connection.release();
         });
     });
 }
