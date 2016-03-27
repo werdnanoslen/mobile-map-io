@@ -15,37 +15,11 @@ angular.module('controllers', [])
             longitude: 0
         },
         events: {
-            idle: function(map) {
-                var center = map.getCenter();
-                var centerCoords = {
-                    'Latitude': center.lat(),
-                    'Longitude': center.lng()
-                };
-                var positionCoords = $scope.map.position.coords;
-                geocoder.geocode({'location': center}, function(results, status) {
-                    var topResult = results[0];
-                    if (!$scope.centerSetByPlaceClick) {
-                        if (google.maps.GeocoderStatus.OK === status) {
-                            if ('ROOFTOP' === topResult.geometry.location_type) {
-                                $scope.search.place = topResult.formatted_address;
-                            } else if (centerCoords === positionCoords) {
-                                $scope.search.place = 'My position';
-                            } else {
-                                console.log('No exact address for this location: ', center);
-                                $scope.search.place = center.toUrlValue();
-                            }
-                        } else {
-                            console.error('geocode error: ', status);
-                            $scope.search.place = center.toUrlValue();
-                        }
-                    }
-                    $scope.centerSetByPlaceClick = false;
-                    $scope.search.lat = centerCoords.Latitude;
-                    $scope.search.lng = centerCoords.Longitude;
-                    //TODO: handle scope updates to async model better than this
-                    $scope.$apply();
-                    $scope.updateReportsInBounds();
-                });
+            dragend: function(map) {
+                $scope.updateBounds(map);
+            },
+            zoom_changed: function(map) {
+                $scope.updateBounds(map);
             }
         },
         markersEvents: {
@@ -159,6 +133,39 @@ angular.module('controllers', [])
             set.apply(this, arguments);
         };
     };
+
+    $scope.updateBounds = function(map) {
+        var center = map.getCenter();
+        var centerCoords = {
+            'Latitude': center.lat(),
+            'Longitude': center.lng()
+        };
+        var positionCoords = $scope.map.position.coords;
+        geocoder.geocode({'location': center}, function(results, status) {
+            var topResult = results[0];
+            if (!$scope.centerSetByPlaceClick) {
+                if (google.maps.GeocoderStatus.OK === status) {
+                    if ('ROOFTOP' === topResult.geometry.location_type) {
+                        $scope.search.place = topResult.formatted_address;
+                    } else if (centerCoords === positionCoords) {
+                        $scope.search.place = 'My position';
+                    } else {
+                        console.log('No exact address for this location: ', center);
+                        $scope.search.place = center.toUrlValue();
+                    }
+                } else {
+                    console.error('geocode error: ', status);
+                    $scope.search.place = center.toUrlValue();
+                }
+            }
+            $scope.centerSetByPlaceClick = false;
+            $scope.search.lat = centerCoords.Latitude;
+            $scope.search.lng = centerCoords.Longitude;
+            //TODO: handle scope updates to async model better than this
+            $scope.$apply();
+            $scope.updateReportsInBounds();
+        });
+    }
 
     $scope.updateReportsInBounds = function() {
         var lat = $scope.search.lat;
@@ -286,30 +293,11 @@ angular.module('controllers', [])
             longitude: 0
         },
         events: {
-            idle: function(map) {
-                if ($scope.centerSetByPlaceClick) {
-                    $scope.centerSetByPlaceClick = false;
-                } else {
-                    var latlng = map.getCenter();
-                    geocoder.geocode({'location': latlng}, function(results, status) {
-                        var topResult = results[0];
-                        if (google.maps.GeocoderStatus.OK === status) {
-                            if ('ROOFTOP' === topResult.geometry.location_type) {
-                                $scope.form.place = topResult.formatted_address;
-                            } else {
-                                console.log('No exact address for this location: ', latlng);
-                                $scope.form.place = latlng.toUrlValue();
-                            }
-                        } else {
-                            console.error('geocode error: ', status);
-                            $scope.form.place = latlng.toUrlValue();
-                        }
-                        $scope.form.lat = latlng.lat;
-                        $scope.form.lng = latlng.lng;
-                        //TODO: handle scope updates to async model better than this
-                        $scope.$apply();
-                    });
-                }
+            dragend: function(map) {
+                $scope.updateBounds(map);
+            },
+            zoom_changed: function(map) {
+                $scope.updateBounds(map);
             }
         },
         options: {
@@ -429,6 +417,32 @@ angular.module('controllers', [])
             set.apply(this, arguments);
         };
     };
+
+    $scope.updateBounds = function(map) {
+        if ($scope.centerSetByPlaceClick) {
+            $scope.centerSetByPlaceClick = false;
+        } else {
+            var latlng = map.getCenter();
+            geocoder.geocode({'location': latlng}, function(results, status) {
+                var topResult = results[0];
+                if (google.maps.GeocoderStatus.OK === status) {
+                    if ('ROOFTOP' === topResult.geometry.location_type) {
+                        $scope.form.place = topResult.formatted_address;
+                    } else {
+                        console.log('No exact address for this location: ', latlng);
+                        $scope.form.place = latlng.toUrlValue();
+                    }
+                } else {
+                    console.error('geocode error: ', status);
+                    $scope.form.place = latlng.toUrlValue();
+                }
+                $scope.form.lat = latlng.lat;
+                $scope.form.lng = latlng.lng;
+                //TODO: handle scope updates to async model better than this
+                $scope.$apply();
+            });
+        }
+    }
 })
 
 .controller('ReportCtrl', function($rootScope, $scope, uiGmapGoogleMapApi, $state, API) {
