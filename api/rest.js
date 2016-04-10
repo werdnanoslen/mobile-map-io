@@ -113,7 +113,6 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
             }
         }
         query = mysql.format(query, table);
-        console.log(query);
         connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({

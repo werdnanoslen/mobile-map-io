@@ -16,7 +16,7 @@ angular.module('services', [])
                 url: api + 'reports/filter',
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                data: {filters}
+                data: filters
             });
         },
         getReportsNearby: function(myLat, myLng, kmAway) {

@@ -3,6 +3,7 @@ angular.module('controllers', [])
 .controller('MapCtrl', function($scope, $rootScope, $ionicLoading, $state, $log,
         uiGmapGoogleMapApi, uiGmapIsReady, API) {
     var geocoder = new google.maps.Geocoder();
+    var filterCriteria;
     $scope.mapReady = false;
     $scope.centerSetByPlaceClick = false;
     $scope.search = {};
@@ -96,7 +97,33 @@ angular.module('controllers', [])
         }
     };
 
+    $scope.filterReports = function() {
+        if (undefined !== filterCriteria) {
+            console.log('filtering by \'' + filterCriteria + '\'');
+            var promise = API.getReports({"*": filterCriteria});
+            promise.then(
+                function (payload) {
+                    var reports = payload.data.reports;
+                    var markers = $scope.reports.markers;
+                    $scope.reports.markers = [];
+                    for (var i=0; i<markers.length; ++i) {
+                        for (var j=0; j<reports.length; ++j) {
+                            if (markers[i].id === reports[j].id) {
+                                $scope.reports.markers.push(reports[j]);
+                            }
+                        }
+                    }
+                },
+                function (errorPayload) {
+                    $log.error('failure filtering reports', errorPayload);
+                    $scope.reports.markers = {};
+                }
+            );
+        }
+    }
+
     $scope.$on('g-places-autocomplete:select', function(event, place) {
+        filterCriteria = undefined;
         $scope.loading = $ionicLoading.show({
             content: 'Getting location...',
             showBackdrop: false
@@ -134,6 +161,17 @@ angular.module('controllers', [])
         };
     };
 
+    $scope.submitSearch = function(keyEvent) {
+        console.log(keyEvent);
+        if (undefined === keyEvent) {
+            $scope.search.place = filterCriteria;
+            $scope.updateReportsInBounds();
+        } else if (13 === keyEvent.which) {
+            filterCriteria = $scope.search.place;
+            $scope.updateReportsInBounds();
+        }
+    }
+
     $scope.updateBounds = function(map) {
         var center = map.getCenter();
         var centerCoords = {
@@ -143,19 +181,21 @@ angular.module('controllers', [])
         var positionCoords = $scope.map.position.coords;
         geocoder.geocode({'location': center}, function(results, status) {
             var topResult = results[0];
-            if (!$scope.centerSetByPlaceClick) {
-                if (google.maps.GeocoderStatus.OK === status) {
-                    if ('ROOFTOP' === topResult.geometry.location_type) {
-                        $scope.search.place = topResult.formatted_address;
-                    } else if (centerCoords === positionCoords) {
-                        $scope.search.place = 'My position';
+            if (undefined === filterCriteria) {
+                if (!$scope.centerSetByPlaceClick) {
+                    if (google.maps.GeocoderStatus.OK === status) {
+                        if ('ROOFTOP' === topResult.geometry.location_type) {
+                            $scope.search.place = topResult.formatted_address;
+                        } else if (centerCoords === positionCoords) {
+                            $scope.search.place = 'My position';
+                        } else {
+                            console.log('No exact address for this location: ', center);
+                            $scope.search.place = center.toUrlValue();
+                        }
                     } else {
-                        console.log('No exact address for this location: ', center);
+                        console.error('geocode error: ', status);
                         $scope.search.place = center.toUrlValue();
                     }
-                } else {
-                    console.error('geocode error: ', status);
-                    $scope.search.place = center.toUrlValue();
                 }
             }
             $scope.centerSetByPlaceClick = false;
@@ -195,6 +235,7 @@ angular.module('controllers', [])
                         };
                         $scope.reports.markers.push(marker);
                     }
+                    $scope.filterReports();
                 },
                 function (errorPayload) {
                     $log.error('failure getting reports', errorPayload);

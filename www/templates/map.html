@@ -14,7 +14,6 @@
     </ion-nav-bar>
     <ion-content scroll="false">
         <div class="item item-divider flex" id="searchBar">
-            Reports near
             <!-- <search-field
                 class="flex-item"
                 ng-show="mapReady">
@@ -22,6 +21,8 @@
             <input  class="flex-item"
                     type="search"
                     g-places-autocomplete
+                    ng-blur="submitSearch()"
+                    ng-keypress="submitSearch($event)"
                     ng-model="search.place"
                     ng-show="mapReady"
             />
