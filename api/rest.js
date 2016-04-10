@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var secrets = require("./secrets.js");
 var api = secrets.APIPATH;
+var columns = ["datetime_occurred", "number", "text", "place", "lat", "lng"];
 
 function REST_ROUTER(router, connection) {
     var self = this;
@@ -95,12 +96,24 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         var keys = Object.keys(req.body);
         for (var i=0; i<keys.length; ++i) {
             query += i ? " AND" : " WHERE";
-            query += " ?? LIKE ?";
             key = keys[i];
-            val = "%" + req.body[key] + "%";
-            table.push(key, val);
+            value = req.body[key];
+            if ("*" === key) {
+                for (var j=0; j<columns.length; ++j) {
+                    query += j ? " OR" : " (";
+                    query += " ?? LIKE ?";
+                    valueLike = "%" + value + "%";
+                    table.push(columns[j], valueLike);
+                }
+                query += " ) ";
+            } else {
+                query += " ?? LIKE ?";
+                valueLike = "%" + value + "%";
+                table.push(key, valueLike);
+            }
         }
         query = mysql.format(query, table);
+        console.log(query);
         connection.query(query, function(err, rows) {
             if (err) {
                 res.status(500).json({
@@ -108,7 +121,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                 });
             } else if (rows.length < 1) {
                 res.status(404).json({
-                    "error": 'report does not exist with that criteria'
+                    "error": "no reports with that criteria"
                 });
             } else {
                 res.json({
