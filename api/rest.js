@@ -95,10 +95,10 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
         var keys = Object.keys(req.body);
         for (var i=0; i<keys.length; ++i) {
             query += i ? " AND" : " WHERE";
-            query += " ?? LIKE %?%";
+            query += " ?? LIKE ?";
             key = keys[i];
-            val = req.body[key];
-            table.push(key, value);
+            val = "%" + req.body[key] + "%";
+            table.push(key, val);
         }
         query = mysql.format(query, table);
         connection.query(query, function(err, rows) {
@@ -115,7 +115,6 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection) {
                     "reports": rows
                 });
             }
-            connection.release();
         });
     });
 
