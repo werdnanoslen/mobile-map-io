@@ -26,12 +26,10 @@ map {
 }
 #searchBar input {
     font: inherit;
-    margin-left: 10px;
     padding: 0px 4px;
 }
 #searchBar button {
     padding-right: 0;
-    margin-right: -6px;
 }
 #addForm input,
 #reportDetails span {
