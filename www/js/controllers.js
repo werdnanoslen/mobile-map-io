@@ -4,6 +4,7 @@ angular.module('controllers', [])
         uiGmapGoogleMapApi, uiGmapIsReady, API) {
     var geocoder = new google.maps.Geocoder();
     var filterCriteria;
+    $scope.Gmap;
     $scope.mapReady = false;
     $scope.centerSetByPlaceClick = false;
     $scope.search = {};
@@ -38,7 +39,7 @@ angular.module('controllers', [])
         $scope.mapReady = true;
         $scope.centerMap();
         $scope.overrideInfoWindowClick();
-        $scope.updateReportsInBounds(uiMap);
+        $scope.updateReportsInBounds();
     });
 
     $scope.$on('$stateChangeSuccess', function(event,toState,toParams,fromState) {
@@ -48,6 +49,7 @@ angular.module('controllers', [])
         if ('' !== fromState.name && 'map' === toState.name) {
             if ($scope.mapReady) {
                 $scope.centerMap();
+                $scope.updateReportsInBounds();
             }
         }
     });
@@ -213,8 +215,15 @@ angular.module('controllers', [])
         if (undefined === lat | undefined === lng) {
             return;
         }
-        uiGmapIsReady.promise(1).then(function(maps) {
-            var bounds = maps[0].map.getBounds();
+        if (!$scope.Gmap) {
+            uiGmapIsReady.promise(1).then(function(maps) {
+                console.log('map is ready');
+                $scope.Gmap = maps[0].map;
+                $scope.updateReportsInBounds();
+            });
+        } else {
+            console.log('update reports');
+            var bounds = $scope.Gmap.getBounds();
             var ne = bounds.getNorthEast();
             var sw = bounds.getSouthWest();
             var distance = Math.sqrt(Math.pow(((69.1/1.61) * (ne.lat() - sw.lat())), 2) + Math.pow(((53/1.61) * (ne.lng() - sw.lng())), 2))/2;
@@ -223,6 +232,7 @@ angular.module('controllers', [])
             promise.then(
                 function (payload) {
                     var reports = payload.data.reports;
+                    console.log('fetched reports', reports);
                     for (var i=0; i<reports.length; ++i) {
                         var report = reports[i];
                         var distance = (0 == report.distance) ? '<0.1' : report.distance;
@@ -241,7 +251,7 @@ angular.module('controllers', [])
                     $log.error('failure getting reports', errorPayload);
                 }
             );
-        });
+        }
     };
 })
 
