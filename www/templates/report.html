@@ -25,7 +25,11 @@
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-location"></i>
-                    <span>{{form.place}}</span>
+                    <input  type="search"
+                            ng-model="form.place"
+                            name="place"
+                            disabled
+                    />
                 </label>
             </form>
         </div>

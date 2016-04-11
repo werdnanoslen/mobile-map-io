@@ -32,10 +32,10 @@ map {
     padding-right: 0;
 }
 #addForm input,
+#reportDetails input,
 #reportDetails span {
-    overflow: auto;
+    background-color: #fff;
     padding-left: 1em;
-    width: 100%;
 }
 #addForm search-field {
     width: 100%;
