@@ -3,7 +3,6 @@
 angular.module('mobile-map-io', [
     'ionic',
     'uiGmapgoogle-maps',
-    'google.places',
     'controllers',
     'services',
     'directives'
@@ -41,3 +40,5 @@ angular.module('mobile-map-io', [
 
     $urlRouterProvider.otherwise('/map');
 });
+
+angular.module('controllers', []);

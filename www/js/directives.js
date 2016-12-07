@@ -1,40 +1,60 @@
-angular.module('directives', [])
+angular.module('directives', ['ionic'])
 
-.directive('searchField', function() {
-    var TEMPLATE = [
-        '<input type="search" ',
-            'g-places-autocomplete ',
-            'ng-model="search.place "',
-            'class="flex-item" ',
-        '/>',
-        '<button ng-click="centerOnMe()" ',
-            'class="button button-small button-icon icon ion-pinpoint"',
-        '</button>'
-    ];
+.directive('groupedRadio', function() {
     return {
-        restrict: 'E',
-        controller: function($scope, $element) {
-            $element.addClass('flex');
-            $scope.centerOnMe = function() {
-                console.log('Getting current location');
-                $scope.loading = $ionicLoading.show({
-                    content: 'Getting current location...',
-                    showBackdrop: false
-                });
-                navigator.geolocation.getCurrentPosition(function(pos) {
-                    console.log('Got pos', pos);
-                    $scope.search.place = 'My location';
-                    $scope.search.lat = pos.coords.latitude;
-                    $scope.search.lng = pos.coords.longitude;
-                    $ionicLoading.hide();
-                }, function(error) {
-                    alert('Unable to get location: ' + error.message);
-                });
-            };
-        },
+        restrict: 'A',
+        require: 'ngModel',
         scope: {
-            gPlacesAutocomplete: '='
+            model: '=ngModel',
+            value: '=groupedRadio'
         },
-        template: TEMPLATE.join('')
+        link: function(scope, element, attrs, ngModelCtrl) {
+            element.addClass('button button-small');
+            element.on('click', function(e) {
+                scope.$apply(function() {
+                    ngModelCtrl.$setViewValue(scope.value);
+                });
+            });
+
+            scope.$watch('model', function(newVal) {
+                element.removeClass('button-positive');
+                if (newVal === scope.value) {
+                    element.addClass('button-positive');
+                }
+            });
+        }
     };
-});
+})
+
+// Thanks to IonicBurger for this one http://stackoverflow.com/a/36739953
+.directive('disabletap', function($timeout) {
+    return {
+        link: function() {
+            $timeout(function() {
+                container = document.getElementsByClassName('pac-container');
+                // disable ionic data tab
+                angular.element(container).attr('data-tap-disabled', 'true');
+                // leave input field if google-address-entry is selected
+                angular.element(container).on("click", function() {
+                    document.getElementById('type-selector').blur();
+                });
+
+            }, 500);
+        }
+    };
+})
+
+// Thanks to Martin for this one http://stackoverflow.com/a/14996261
+.directive('selectOnClick', ['$window', function ($window) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.on('click', function () {
+                if (!$window.getSelection().toString()) {
+                    // Required for mobile Safari
+                    this.setSelectionRange(0, this.value.length)
+                }
+            });
+        }
+    };
+}]);

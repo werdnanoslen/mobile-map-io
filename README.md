@@ -1,14 +1,14 @@
 # mobile-map-io
-This is a boilerplate mobile hybrid app for I/O with maps. The idea is that many civic apps have to do with reporting things as people see them. That means people are **mobile**, they're talking about things that are **map**pable, and they're reporting those things and getting those reports **(I/O)**. These were the three key things that drove this project, in addition to the frequent reinvention of this sort of generic app infrastructure ad-hoc. 
+This is a boilerplate mobile hybrid app for I/O with maps. The idea is that many civic apps have to do with reporting things as people see them. That means people are **mobile**, they're talking about things that are **map**pable, and they're reporting those things and getting those reports **(I/O)**. These were the three key things that drove this project, in addition to the frequent reinvention of this sort of generic app infrastructure ad-hoc.
 
-Now, if you want to make an app for your neighbors to report broken streetlights, fork this repo. If you want to make an app for your community to report code violations, fork this repo. If you want to make an app to post all your favorite resturants, fork this repo. You can do all those things out of the box. If you want to make this into something slightly different, like a [system that connects businesses and hungry people](https://github.com/werdnanoslen/gleanhub), follow these instructions to start developing:
+Now, if you want to make an app for your neighbors to report broken streetlights, fork this repo. If you want to make an app for your community to report code violations, fork this repo. If you want to make an app to post all your favorite resturants, fork this repo. You can do all those things out of the box. If you want to make this into something slightly different, like a [system that connects businesses and hungry people](https://github.com/werdnanoslen/mobile-map-io), follow these instructions to start developing:
 
 ### Installation
 1. Run ```npm install```
 1. Run ```bower install```
-1. Rename secrets.js.example to just secrets.js and add your server config
-1. Import api/reports.sql
-1. Run ```node api/server.js```
+1. Rename .env.example to just .env and add your secret keys/config
+1. Import api/reports.sql and api/users.sql
+1. Run ```npm start```
 
 ### This project
 This software is licensed to Andrew Nelson, see the LICENSE file. If you would like an exception to this license for commercial/proprietary derivative work, please email me.

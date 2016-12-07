@@ -1,41 +1,64 @@
-<ion-view view-title="Report">
+<ion-view view-title="Post">
     <ion-nav-bar align-title="center" class="bar-positive">
-        <ion-nav-back-button></ion-nav-back-button>
+        <ion-nav-back-button ng-hide="noGoingBack"></ion-nav-back-button>
+        <ion-nav-buttons side="left">
+            <button class="button button-icon button-clear icon ion-map" ui-sref="map" ng-show="noGoingBack"></button>
+        </ion-nav-buttons>
         <ion-nav-buttons side="right">
-            <button class="button button-icon icon ion-map"
-                    ui-sref="map">
+            <button class="button button-icon button-clear icon ion-plus"
+                    ui-sref="add">
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content scroll="false" id="mainContainer">
+    <ion-content scroll="true" id="mainContainer">
         <div id="formContainer">
-            <form class="list" id="reportDetails">
-                <label class="item item-input">
-                    <i class="icon ion-android-time"></i>
-                    <input type="date" name="date" ng-model="form.date" disabled />
-                    <input type="time" step="60" name="time" ng-model="form.time" disabled />
+            <form class="list" id="addForm" name="addForm">
+                <img ng-src="{{form.photo}}" ng-hide="form.photo === null"
+                        id="photoPreview"></canvas>
+                <div class="item item-divider">
+                    {{whenReported}}
+                </div>
+                <label class="item item-input item-floating-label"
+                         ng-hide="form.what === null">
+                    <span class="input-label">What is it?</span>
+                    <textarea   name="what"
+                                ng-model="form.what"
+                                placeholder="What is it?"
+                                rows="1"
+                                disabled>
+                    </textarea>
                 </label>
-                <label class="item item-input">
-                    <i class="icon ion-social-bitcoin"></i>
-                    <input type="number" name="number" ng-model="form.number" disabled />
+                <label class="item" ng-hide="form.which === null">
+                    Which is it?
+                    <span class="badge badge-{{form.which ? 'stable' : 'assertive'}}">
+                        {{form.which ? 'YES' : 'NO'}}
+                    </span>
                 </label>
-                <label class="item item-input">
-                    <i class="icon ion-android-textsms"></i>
-                    <input type="text" name="text" ng-model="form.text" disabled />
+                <label class="item item-input item-floating-label" ng-hide="form.notes === null">
+                    <span class="input-label">Why?</span>
+                    <textarea   name="why"
+                                ng-model="form.why"
+                                placeholder="Why?"
+                                rows="2"
+                                disabled>
+                    </textarea>
                 </label>
-                <label class="item item-input">
-                    <i class="icon ion-location"></i>
-                    <input  type="search"
-                            ng-model="form.place"
-                            name="place"
-                            disabled
-                    />
-                </label>
+                <div class="item item-input item-floating-label" ng-hide="form.place === null">
+                    <span class="input-label">Where is it?</span>
+                    <div class="flex">
+                        <input  type="search"
+                        class="flex-item"
+                        name="place"
+                        ng-model="form.place"
+                        placeholder="Where is it?"
+                        disabled
+                        >
+                    </div>
+                </div>
             </form>
         </div>
 
-        <div id="mapContainer">
-            <div id="centerMarker"></div>
+        <div id="mapContainer" ng-hide="form.lat === null">
             <ui-gmap-google-map
                  center="map.center"
                  options="map.options"
@@ -46,7 +69,18 @@
                     icon="map.position.icon"
                     options="map.position.options">
                 </ui-gmap-marker>
+                <ui-gmap-marker
+                    coords="map.search.coords"
+                    idkey="'map.search.id'"
+                    options="map.markers.options">
+                </ui-gmap-marker>
             </ui-gmap-google-map>
+        </div>
+
+        <div id="still-active-button">
+            <button class="button button-full button-small button-dark" ng-click="showActiveQuestion()">
+                Remove this report
+            </button>
         </div>
     </ion-content>
 </ion-view>

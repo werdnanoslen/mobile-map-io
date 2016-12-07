@@ -2,9 +2,12 @@ angular.module('services', [])
 
 .factory('API', function ($q, $http) {
     var deferred = $q.defer();
-    var api = '//45.55.80.26:8080/demos/mobile-map-io/api/';
+    var api = 'https://mobile-map-io.herokuapp.com/demos/mobile-map-io/api/';
 
     return {
+        ipGeolocate: function() {
+            return $http.get('http://ipinfo.io');
+        },
         getReports: function () {
             return $http.get(api + 'reports');
         },
@@ -38,7 +41,7 @@ angular.module('services', [])
         updateReport: function (id, reportJson) {
             return $http({
                 url: api + 'reports/' + id,
-                method: 'POST',
+                method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 data: {'reportJson': reportJson}
             });

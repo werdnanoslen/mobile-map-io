@@ -1,7 +1,7 @@
-<ion-view view-title="List">
+<ion-view view-title="All Posts">
     <ion-nav-bar align-title="center" class="bar-positive">
         <ion-nav-buttons side="left">
-            <button class="button button-icon icon ion-map"
+            <button class="button button-icon button-clear icon ion-map"
                     ui-sref="map"
                     nav-direction="swap">
             </button>
@@ -13,25 +13,33 @@
         </ion-nav-buttons>
     </ion-nav-bar>
     <ion-content>
-        <div class="list">
-            <div class="item item-divider flex" id="searchBar">
-                <!-- <search-field class="flex-item"></search-field> -->
+        <div class="item item-divider flex" id="searchBar">
+            <div id="searchBarBox" class="flex-item">
                 <input
-                    class="flex-item"
                     type="search"
-                    g-places-autocomplete
+                    id="search"
+                    class="flex-item"
                     ng-model="search.place"
+                    disabletap
                 />
-                <button class="button button-small button-icon icon ion-pinpoint"
-                        ng-click="centerOnMe()">
+                <button class="button button-small button-icon icon ion-ios-close-empty flex-item"
+                        ng-click="clearSearch()" ng-show="explicitSearch">
                 </button>
             </div>
+            <button class="button button-small button-icon icon ion-pinpoint flex-item"
+                    ng-click="centerOnMe()">
+            </button>
+        </div>
+        <div class="list">
             <a  class="item"
                 ng-repeat="marker in reports.markers"
                 ui-sref="report({reportId: marker.id})">
-                {{marker.title}}
                 <span class="item-note">
                     {{marker.distance}} km
+                </span>
+                <span>
+                    <h2>{{marker.place}}</h2>
+                    <p>{{marker.notes}}</p>
                 </span>
             </a>
         </div>

@@ -1,63 +1,98 @@
-<ion-view view-title="New report">
+<ion-view view-title="New Post">
     <ion-nav-bar align-title="center" class="bar-positive">
-        <ion-nav-buttons side="left">
-            <button class="button button-icon icon ion-android-close"
-                    ui-sref="map">
-            </button>
+        <ion-nav-back-button ng-hide="keyboardSpace"></ion-nav-back-button>
+        <ion-nav-buttons side="left" ng-hide="keyboardSpace">
+            <button class="button button-icon button-clear icon ion-map" ui-sref="map" ng-show="noGoingBack"></button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-            <button class="button button-clear" ng-click="submitForm()">
+            <button class="button button-clear" ng-click="submitForm()"
+                    ng-hide="keyboardSpace">
                 Submit
             </button>
         </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-content scroll="false" id="mainContainer">
-        <div id="formContainer">
+    <ion-content scroll="true" id="mainContainer">
+        <div id="formContainer" ng-style="{'margin-top': keyboardSpace}">
             <form class="list" id="addForm" name="addForm">
-                <label class="item item-input">
-                    <i class="icon ion-android-time"></i>
-                    <input type="date" name="date" ng-model="form.date" />
-                    <input type="time" step="60" name="time" ng-model="form.time" />
-                </label>
-                <label class="item item-input">
-                    <i class="icon ion-social-bitcoin"></i>
-                    <input type="number" name="number" ng-model="form.number" />
-                </label>
-                <label class="item item-input">
-                    <i class="icon ion-android-textsms"></i>
-                    <input type="text" name="text" ng-model="form.text" />
-                </label>
-                <div class="item item-input">
-                    <i class="icon ion-location"></i>
-                    <!-- <search-field></search-field> -->
-                    <input  type="search"
-                            g-places-autocomplete
-                            ng-model="form.place"
+                <div class="item item-input item-floating-label">
+                    <span class="input-label">Where is it?</span>
+                    <div class="flex">
+                        <input
+                            class="flex-item"
+                            id="search"
                             name="place"
-                    />
-                    <button class="button button-small button-icon icon ion-pinpoint"
+                            ng-blur="blurWhere($event)"
+                            ng-focus="focusWhere($event)"
+                            ng-model="form.place"
+                            placeholder="Where is it?"
+                            type="search"
+                            disabletap
+                        />
+                        <button class="flex-item button button-small button-icon icon ion-pinpoint"
                             ng-click="centerOnMe()"
                             ng-show="mapReady">
-                    </button>
+                        </button>
+                    </div>
                 </div>
+                <div id="mapContainer">
+                    <div id="centerMarker" ng-show="isDragging"></div>
+                    <ui-gmap-google-map
+                         center="map.center"
+                         control="map.control"
+                         events="map.events"
+                         options="map.options"
+                         zoom="map.zoom">
+                        <ui-gmap-marker
+                            coords="map.position.coords"
+                            idkey="'map.position.id'"
+                            icon="map.position.icon"
+                            options="map.position.options">
+                        </ui-gmap-marker>
+                        <ui-gmap-marker
+                            coords="map.search.coords"
+                            idkey="'map.search.id'"
+                            options="map.markers.options">
+                        </ui-gmap-marker>
+                    </ui-gmap-google-map>
+                </div>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">What is it?</span>
+                    <textarea   name="what"
+                                ng-model="form.what"
+                                placeholder="What is it?"
+                                rows="1">
+                    </textarea>
+                </label>
+                <div class="item item-stacked-label">
+                    <label class="input-label has-input" for="which">
+                        Which is it?
+                    </label>
+                    <div class="button-bar" id="which">
+                        <a grouped-radio="1" ng-model="form.which">Yes</a>
+                        <a grouped-radio="0" ng-model="form.which">No</a>
+                    </div>
+                </div>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Why</span>
+                    <textarea   name="why"
+                                ng-model="form.why"
+                                placeholder="Why?"
+                                rows="3">
+                </textarea>
+            </label>
+            <div class="item">
+                <input type="file" class="hidden" id="fileInput">
+                <button class="button button-positive button-block"
+                        ng-hide="photoPreview" ng-click="previewPhoto()">
+                    Upload photo
+                </button>
+                <canvas ng-show="photoPreview" id="photoPreview"></canvas>
+                <button class="button button-assertive button-block"
+                        ng-show="photoPreview" ng-click="removePhoto()">
+                    Remove photo
+                </button>
+            </div>
             </form>
-        </div>
-
-        <div id="mapContainer">
-            <div id="centerMarker"></div>
-            <ui-gmap-google-map
-                 center="map.center"
-                 control="map.control"
-                 events="map.events"
-                 options="map.options"
-                 zoom="map.zoom">
-                <ui-gmap-marker
-                    coords="map.position.coords"
-                    idkey="'map.position.id'"
-                    icon="map.position.icon"
-                    options="map.position.options">
-                </ui-gmap-marker>
-            </ui-gmap-google-map>
         </div>
     </ion-content>
 </ion-view>
