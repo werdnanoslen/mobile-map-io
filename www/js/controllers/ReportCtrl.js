@@ -59,9 +59,9 @@ angular.module('controllers')
             } else if (daysAgo <= 7) {
                 datetimeString = daysAgo + " days ago";
             } else if (then.getYear() === now.getYear()) {
-                datetimeString = monthNames[then.getMonth()] + " " + then.getDay();
+                datetimeString = monthNames[then.getMonth()] + " " + then.getDate();
             } else {
-                datetimeString = monthNames[then.getMonth()] + " " + then.getDay() + ", " + then.getFullYear();
+                datetimeString = monthNames[then.getMonth()] + " " + then.getDate() + ", " + then.getFullYear();
             }
             console.log(then);
             $scope.whenReported = "Posted " + datetimeString;
