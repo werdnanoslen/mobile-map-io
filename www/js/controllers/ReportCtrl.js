@@ -1,7 +1,7 @@
 angular.module('controllers')
 
 .controller('ReportCtrl', function($rootScope, $scope, $ionicLoading, $log,
-            $state, $ionicHistory, $location, uiGmapGoogleMapApi, API) {
+            $state, $ionicHistory, $location, $ionicPopup, uiGmapGoogleMapApi, API) {
     $scope.noGoingBack = true;
     $scope.map = {
         center: {
