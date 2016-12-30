@@ -83,16 +83,18 @@ angular.module('controllers')
                     var reports = payload.data.reports;
                     for (var i=0; i<reports.length; ++i) {
                         var report = reports[i];
-                        var distance = (0 == report.distance) ? '<0.1' : report.distance;
-                        var marker = {
-                            latitude: report.lat,
-                            longitude: report.lng,
-                            place: report.place,
-                            notes: report.notes,
-                            id: report.id,
-                            distance: distance
-                        };
-                        $scope.reports.markers.push(marker);
+                        if (report.active) {
+                            var distance = (0 == report.distance) ? '<0.1' : report.distance;
+                            var marker = {
+                                latitude: report.lat,
+                                longitude: report.lng,
+                                place: report.place,
+                                notes: report.notes,
+                                id: report.id,
+                                distance: distance
+                            };
+                            $scope.reports.markers.push(marker);
+                        }
                     }
                 }
             },
