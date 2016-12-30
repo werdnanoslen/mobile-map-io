@@ -7,7 +7,7 @@ Now, if you want to make an app for your neighbors to report broken streetlights
 1. Run ```npm install```
 1. Run ```bower install```
 1. Rename .env.example to just .env and add your secret keys/config
-1. Import api/reports.sql and api/users.sql
+1. Import api/reports.sql
 1. Run ```npm start```
 
 ### This project
