@@ -4,7 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var cloudinary = require('cloudinary');
-var dotenv = require('dotenv').config({path: '/var/www/demos/mobile-map-io/api/.env'});
+var dotenv = require('dotenv').config({path: __dirname + '/.env'});
 
 // Configure database connection
 function Connection() {
