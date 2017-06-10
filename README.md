@@ -8,7 +8,7 @@ Now, if you want to make an app for your neighbors to report broken streetlights
 
 1. Run ```npm install```
 1. Run ```bower install```
-1. Rename .env.example to just .env and add your secret keys/config
+1. Copy .env.example to just .env and add your secret keys/config
 1. Import api/reports.sql
 1. Run ```npm start```
 1. Check out the [CONTRIBUTING.md](https://github.com/werdnanoslen/mobile-map-io/blob/master/CONTRIBUTING.md) file for how to contribute back
