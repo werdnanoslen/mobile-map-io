@@ -11,6 +11,7 @@ Now, if you want to make an app for your neighbors to report broken streetlights
 1. Run ```bower install```
 1. Copy .env.example to just .env and add your secret keys/config
 1. Import api/reports.sql ```mysql -u[username] -p[password] -h[hostname] [database] < api/reports.sql```
+1. Update api/server.js ```api``` variable to point to your API (ignore if using defaults)
 1. Run ```sudo npm start``` to run server
 1. Run ```ionic serve``` to run app
 1. Build app for android ```ionic build android```, usually saving to ```platforms/android/build/outputs/apk/android-debug.apk```

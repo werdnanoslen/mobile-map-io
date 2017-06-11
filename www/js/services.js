@@ -2,7 +2,7 @@ angular.module('services', [])
 
 .factory('API', function ($q, $http) {
     var deferred = $q.defer();
-    var api = 'https://mobile-map-io.herokuapp.com/demos/mobile-map-io/api/';
+    var api = 'localhost:8080/api/';
 
     return {
         ipGeolocate: function() {
