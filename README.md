@@ -6,6 +6,7 @@ This is a boilerplate mobile hybrid app for I/O with maps. The idea is that many
 
 Now, if you want to make an app for your neighbors to report broken streetlights, fork this repo. If you want to make an app for your community to report code violations, fork this repo. If you want to make an app to post all your favorite resturants, fork this repo. You can do all those things out of the box. If you want to make this into something slightly different, like a [system that connects businesses and hungry people](https://github.com/werdnanoslen/mobile-map-io), follow these instructions to start developing:
 
+1. Install [npm](https://www.npmjs.com/get-npm), [mysql](https://mariadb.org/download/), and [a web server](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-14-04#step-1-install-apache)
 1. Run ```npm install```
 1. Run ```bower install```
 1. Copy .env.example to just .env and add your secret keys/config
