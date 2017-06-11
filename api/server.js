@@ -65,18 +65,24 @@ router.get("/reports", function(req, res) {
     var table = ["reports"];
     query = mysql.format(query, table);
     connection.acquire(function(err, con) {
-        con.query(query, function(err, rows) {
-            con.release();
-            if (err) {
-                res.status(500).json({
-                    "error": err
-                });
-            } else {
-                res.json({
-                    "reports": rows
-                });
-            }
-        });
+        if (err) {
+            res.status(500).json({
+                "error": err
+            });
+        } else {
+            con.query(query, function(err, rows) {
+                con.release();
+                if (err) {
+                    res.status(500).json({
+                        "error": err
+                    });
+                } else {
+                    res.json({
+                        "reports": rows
+                    });
+                }
+            });
+        }
     });
 });
 
@@ -86,18 +92,24 @@ router.get("/reports/:id", function(req, res) {
     var table = ["reports", "id", req.params.id];
     query = mysql.format(query, table);
     connection.acquire(function(err, con) {
-        con.query(query, function(err, rows) {
-            con.release();
-            if (err) {
-                res.status(500).json({
-                    "error": err
-                });
-            } else {
-                res.json({
-                    "report": rows
-                });
-            }
-        });
+        if (err) {
+            res.status(500).json({
+                "error": err
+            });
+        } else {
+            con.query(query, function(err, rows) {
+                con.release();
+                if (err) {
+                    res.status(500).json({
+                        "error": err
+                    });
+                } else {
+                    res.json({
+                        "report": rows
+                    });
+                }
+            });
+        }
     });
 });
 
@@ -112,20 +124,26 @@ router.post("/reports/nearby", function(req, res) {
     ];
     query = mysql.format(query, table);
     connection.acquire(function(err, con) {
-        con.query(query, function(err, rows) {
-            con.release();
-            if (err) {
-                res.status(500).json({
-                    "error": err
-                });
-            } else if (rows.length < 1) {
-                res.sendStatus(204);
-            } else {
-                res.json({
-                    "reports": rows
-                });
-            }
-        });
+        if (err) {
+            res.status(500).json({
+                "error": err
+            });
+        } else {
+            con.query(query, function(err, rows) {
+                con.release();
+                if (err) {
+                    res.status(500).json({
+                        "error": err
+                    });
+                } else if (rows.length < 1) {
+                    res.sendStatus(204);
+                } else {
+                    res.json({
+                        "reports": rows
+                    });
+                }
+            });
+        }
     });
 });
 
@@ -156,20 +174,26 @@ router.post("/reports/filter", function(req, res) {
     }
     query = mysql.format(query, table);
     connection.acquire(function(err, con) {
-        con.query(query, function(err, rows) {
-            con.release();
-            if (err) {
-                res.status(500).json({
-                    "error": err
-                });
-            } else if (rows.length < 1) {
-                res.sendStatus(204);
-            } else {
-                res.json({
-                    "reports": rows
-                });
-            }
-        });
+        if (err) {
+            res.status(500).json({
+                "error": err
+            });
+        } else {
+            con.query(query, function(err, rows) {
+                con.release();
+                if (err) {
+                    res.status(500).json({
+                        "error": err
+                    });
+                } else if (rows.length < 1) {
+                    res.sendStatus(204);
+                } else {
+                    res.json({
+                        "reports": rows
+                    });
+                }
+            });
+        }
     });
 });
 
@@ -210,18 +234,24 @@ router.post("/reports", function(req, res) {
         }
         query = mysql.format(query, table);
         connection.acquire(function(err, con) {
-            con.query(query, function(err, rows) {
-                con.release();
-                if (err) {
-                    res.status(500).json({
-                        "error": err
-                    });
-                } else {
-                    res.json({
-                        "report": rows
-                    });
-                }
-            });
+            if (err) {
+                res.status(500).json({
+                    "error": err
+                });
+            } else {
+                con.query(query, function(err, rows) {
+                    con.release();
+                    if (err) {
+                        res.status(500).json({
+                            "error": err
+                        });
+                    } else {
+                        res.json({
+                            "report": rows
+                        });
+                    }
+                });
+            }
         });
     }
 });
@@ -236,18 +266,24 @@ router.put("/reports/:id", function(req, res) {
     ];
     query = mysql.format(query, table);
     connection.acquire(function(err, con) {
-        con.query(query, function(err, rows) {
-            con.release();
-            if (err) {
-                res.status(500).json({
-                    "error": err
-                });
-            } else {
-                res.json({
-                    "report": rows
-                });
-            }
-        });
+        if (err) {
+            res.status(500).json({
+                "error": err
+            });
+        } else {
+            con.query(query, function(err, rows) {
+                con.release();
+                if (err) {
+                    res.status(500).json({
+                        "error": err
+                    });
+                } else {
+                    res.json({
+                        "report": rows
+                    });
+                }
+            });
+        }
     });
 });
 
@@ -257,18 +293,24 @@ router.delete("/reports/:id", function(req, res) {
     var table = ["reports", "id", req.params.id];
     query = mysql.format(query, table);
     connection.acquire(function(err, con) {
-        con.query(query, function(err, rows) {
-            con.release();
-            if (err) {
-                res.status(500).json({
-                    "error": err
-                });
-            } else {
-                res.json({
-                    "report": rows
-                });
-            }
-        });
+        if (err) {
+            res.status(500).json({
+                "error": err
+            });
+        } else {
+            con.query(query, function(err, rows) {
+                con.release();
+                if (err) {
+                    res.status(500).json({
+                        "error": err
+                    });
+                } else {
+                    res.json({
+                        "report": rows
+                    });
+                }
+            });
+        }
     });
 });
 
