@@ -2,7 +2,7 @@ angular.module('services', [])
 
 .factory('API', function ($q, $http) {
     var deferred = $q.defer();
-    var api = 'localhost:8080/api/';
+    var api = '/api/';
 
     return {
         ipGeolocate: function() {
